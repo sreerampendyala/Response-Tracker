@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Response Counter</string>
+    <string name="Open">Response Counter</string>
+    <string name="Close">Response Counter</string>
+    <string name="email_name">Email</string>
+    <string name="password_text">Password</string>
+</resources>
