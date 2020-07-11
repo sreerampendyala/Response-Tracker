@@ -1,4 +1,4 @@
-package com.example.util.Interfaces;
+package com.example.util.Interfaces.DataInterfaces;
 
 import android.net.Uri;
 

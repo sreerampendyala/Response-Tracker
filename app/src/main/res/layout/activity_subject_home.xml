@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/dl_Home_Activity">
+    android:id="@+id/dl_Subject_Home_Activity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/id_view_Home_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background"
-        tools:context=".HomeActivity">
+        tools:context=".HomeActivites.SubjectHome">
 
         <ImageView
             android:id="@+id/imgView_pic_home"

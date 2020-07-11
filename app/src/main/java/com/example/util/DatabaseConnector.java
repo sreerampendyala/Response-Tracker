@@ -5,12 +5,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.util.Interfaces.CheckLoggedInInterface;
-import com.example.util.Interfaces.CredValidationInterface;
-import com.example.util.Interfaces.DataInterface;
-import com.example.util.Interfaces.ImageInterface;
-import com.example.util.Interfaces.SignUpInterface;
-import com.example.util.Interfaces.SubjectInterface;
+import com.example.util.Interfaces.DataInterfaces.DataSaveInterface;
+import com.example.util.Interfaces.ValidationInterfaces.CheckLoggedInInterface;
+import com.example.util.Interfaces.ValidationInterfaces.CredValidationInterface;
+import com.example.util.Interfaces.DataInterfaces.ImageInterface;
+import com.example.util.Interfaces.ValidationInterfaces.SignUpInterface;
+import com.example.util.Interfaces.ValidationInterfaces.SubjectInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -436,9 +436,9 @@ public class DatabaseConnector {
      * This method can be used to save object data in the database given the path.
      * @param path The file path where data must be stored in the database
      * @param data The object containing the data that needs to be stored.
-     * @param listner The Interface for the callbacks, DataInterface.
+     * @param listner The Interface for the callbacks, DataSaveInterface.
      */
-    public void saveData(String path, final Object data, final DataInterface listner) {
+    public void saveData(String path, final Object data, final DataSaveInterface listner) {
         collectionReference = db.collection("Users");
         final String savePath = path + Timestamp.now().toString();
         collectionReference.whereEqualTo("UserIdInDB", EntityClass.getInstance().getUserIdInDb()).get()

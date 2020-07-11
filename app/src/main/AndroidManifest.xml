@@ -13,14 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AppHomeActivity"></activity>
-        <activity android:name=".HelpActivity" />
-        <activity android:name=".NoteActivity" />
-        <activity android:name=".SingleButtonActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".DuelButtonActivity" />
-        <activity android:name=".ReportActivity" />
+        <activity android:name=".SignInActivities.SignInActivity"></activity>
+        <activity android:name=".SignUpActivities.SubjectSignUpActivity" />
+        <activity android:name=".HomeActivites.PhysicianHome" />
+        <activity android:name=".MiscellaneousActivites.HelpActivity" />
+        <activity android:name=".MiscellaneousActivites.NoteActivity" />
+        <activity android:name=".TestActivities.SingleButtonActivity" />
+        <activity android:name=".SignUpActivities.PhysicianSignUpActivity" />
+        <activity android:name=".HomeActivites.SubjectHome" />
+        <activity android:name=".TestActivities.DuelButtonActivity" />
+        <activity android:name=".MiscellaneousActivites.ReportActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

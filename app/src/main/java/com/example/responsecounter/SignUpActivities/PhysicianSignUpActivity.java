@@ -1,4 +1,4 @@
-package com.example.responsecounter;
+package com.example.responsecounter.SignUpActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -9,13 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.example.responsecounter.HomeActivites.PhysicianHome;
+import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
-import com.example.util.Interfaces.SignUpInterface;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.util.Interfaces.ValidationInterfaces.SignUpInterface;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class SignUpActivity extends AppCompatActivity {
+public class PhysicianSignUpActivity extends AppCompatActivity {
 
     private EditText userEmail;
     private EditText pwd;
@@ -27,7 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_physician_sign_up);
 
         createAccount = findViewById(R.id.signUpBtn_signup);
         pgr = findViewById(R.id.create_Progress);
@@ -56,19 +58,19 @@ public class SignUpActivity extends AppCompatActivity {
                 public void signUpStatus(boolean isSuccess) {
                     if(isSuccess) {
                         pgr.setVisibility(View.INVISIBLE);
-                        startActivity(new Intent(SignUpActivity.this, AppHomeActivity.class));
+                        startActivity(new Intent(PhysicianSignUpActivity.this, PhysicianHome.class));
                     }
                 }
 
                 @Override
                 public void onFailure(String errMessage) {
                     pgr.setVisibility(View.INVISIBLE);
-                    Toast.makeText(SignUpActivity.this, errMessage, Toast.LENGTH_LONG).show();
+                    Toast.makeText(PhysicianSignUpActivity.this, errMessage, Toast.LENGTH_LONG).show();
                 }
             });
 
         } else {
-            Toast.makeText(SignUpActivity.this, "Empty Feilds Not Allowed", Toast.LENGTH_LONG).show();
+            Toast.makeText(PhysicianSignUpActivity.this, "Empty Feilds Not Allowed", Toast.LENGTH_LONG).show();
         }
 
     }

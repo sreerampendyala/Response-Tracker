@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/dl_app_home">
+    android:id="@+id/dl_physician_home">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background"
-        tools:context=".AppHomeActivity">
+        tools:context=".HomeActivites.PhysicianHome">
 
         <EditText
             android:id="@+id/subjectName_tb"

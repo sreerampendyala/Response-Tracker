@@ -4,4 +4,7 @@
     <string name="Close">Response Counter</string>
     <string name="email_name">Email</string>
     <string name="password_text">Password</string>
+    <string name="patient_MainActivity">Patient</string>
+    <string name="physician_MainActivity">Physician</string>
+    <string name="please_choose_physician_login_or_patient_login">Please Choose Physician Login or Patient Login</string>
 </resources>

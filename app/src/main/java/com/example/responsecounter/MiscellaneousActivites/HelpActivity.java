@@ -1,4 +1,4 @@
-package com.example.responsecounter;
+package com.example.responsecounter.MiscellaneousActivites;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,6 +9,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.responsecounter.HomeActivites.SubjectHome;
+import com.example.responsecounter.MainActivity;
+import com.example.responsecounter.R;
+import com.example.responsecounter.TestActivities.DuelButtonActivity;
+import com.example.responsecounter.TestActivities.SingleButtonActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -99,6 +104,6 @@ public class HelpActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         dl.closeDrawers();
-        startActivity(new Intent(HelpActivity.this, HomeActivity.class));
+        startActivity(new Intent(HelpActivity.this, SubjectHome.class));
     }
 }

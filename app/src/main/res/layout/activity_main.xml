@@ -5,160 +5,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background"
     android:id="@+id/dl">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/login_progress"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/patient_physician"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="#F5EFEF"
         android:backgroundTintMode="add"
         tools:context=".MainActivity">
 
-        <TextView
-            android:id="@+id/signIn_tv"
-            android:layout_width="74dp"
-            android:layout_height="23dp"
-            android:fontFamily="@font/alegreya_sans_sc_extrabold"
-            android:text="Sign Up"
-            android:textColor="#69F0AE"
-            android:textSize="19sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.952"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.046" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cardView2"
-            android:layout_width="372dp"
-            android:layout_height="250dp"
-            android:alwaysDrawnWithCache="false"
-            android:animateLayoutChanges="false"
-            android:background="@color/colorPrimary"
-            android:elevation="8dp"
-            android:focusable="auto"
-            android:focusableInTouchMode="true"
-            android:padding="@dimen/cardview_default_elevation"
-            android:paddingStart="@dimen/cardview_default_elevation"
-            android:paddingLeft="@dimen/cardview_default_elevation"
-            android:paddingTop="@dimen/cardview_default_elevation"
-            android:paddingEnd="@dimen/cardview_default_elevation"
-            android:paddingRight="@dimen/cardview_default_elevation"
-            android:paddingBottom="@dimen/cardview_default_elevation"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.487"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.714">
-
-            <AutoCompleteTextView
-                android:id="@+id/username_tb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/email_name"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.778"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.209" />
-
-            <EditText
-                android:id="@+id/pwd_tb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/password_text"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.785"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/username_tb"
-                app:layout_constraintVertical_bias="0.275" />
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_gravity="center_vertical|center_horizontal">
             <TextView
-                android:id="@+id/username_tv"
-                android:layout_width="wrap_content"
+                android:id="@+id/WelcomeText"
+                android:padding="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/alegreya_sans_sc_extrabold"
-                android:text="Username"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/cardview_light_background"
+                android:textAllCaps="true"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/pwd_tb"
-                app:layout_constraintHorizontal_bias="0.464"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.242" />
+                android:textSize="20sp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@android:color/black"
+                android:text="@string/please_choose_physician_login_or_patient_login"/>
 
-            <TextView
-                android:id="@+id/pwd_tv"
-                android:layout_width="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_isPhysician"
+                android:layout_width="379dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/alegreya_sans_sc_extrabold"
-                android:text="Password"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/cardview_light_background"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/username_tb"
-                app:layout_constraintHorizontal_bias="0.478"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.553" />
+                app:cardCornerRadius="8dp"
+                app:cardElevation="6dp"
+                android:layout_below="@+id/WelcomeText"
+                app:cardUseCompatPadding="true">
 
-            <Button
-                android:id="@+id/signUpBtn"
-                android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/button_isPhysician"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:text="@string/physician_MainActivity"
+                    android:layout_marginBottom="-5dp"
+                    android:textColor="@android:color/black"
+                    android:textAllCaps="true" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_isPatient"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/alegreya_sans_sc_extrabold"
-                android:text="@string/common_signin_button_text"
-                android:textColor="@color/cardview_light_background"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.92" />
+                android:layout_below="@+id/cardView_isPhysician"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="6dp"
+                app:cardCornerRadius="8dp">
 
-            <androidx.core.widget.ContentLoadingProgressBar
-                android:id="@+id/signIn_Progress"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="175dp"
-                android:layout_height="36dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:id="@+id/button_isPatient"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-5dp"
+                    android:background="@android:color/transparent"
+                    android:textColor="@android:color/black"
+                    android:text="@string/patient_MainActivity"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/lable_tv"
-            android:layout_width="361dp"
-            android:layout_height="192dp"
-            android:fontFamily="@font/cherry_cream_soda"
-            android:text="Parkinson's Response Counter app. Login First !!"
-            android:textColor="@color/cardview_light_background"
-            android:textSize="33sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.281" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.drawerlayout.widget.DrawerLayout>

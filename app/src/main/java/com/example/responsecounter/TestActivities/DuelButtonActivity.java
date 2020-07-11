@@ -1,4 +1,4 @@
-package com.example.responsecounter;
+package com.example.responsecounter.TestActivities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,8 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.responsecounter.HomeActivites.SubjectHome;
+import com.example.responsecounter.MainActivity;
+import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
+import com.example.responsecounter.R;
+import com.example.responsecounter.MiscellaneousActivites.ReportActivity;
 import com.example.util.DatabaseConnector;
-import com.example.util.Interfaces.DataInterface;
+import com.example.util.Interfaces.DataInterfaces.DataSaveInterface;
 import com.example.util.Models.TapModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -108,7 +113,7 @@ public class DuelButtonActivity extends AppCompatActivity {
 
                 try {
                     DatabaseConnector dbObj = new DatabaseConnector();
-                    dbObj.saveData("SubjectData/DoubleTapData/", record, new DataInterface() {
+                    dbObj.saveData("SubjectData/DoubleTapData/", record, new DataSaveInterface() {
                         @Override
                         public void successStatus(boolean isSuccess) {
 
@@ -191,6 +196,6 @@ public class DuelButtonActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         dl.closeDrawers();
-        startActivity(new Intent(DuelButtonActivity.this, HomeActivity.class));
+        startActivity(new Intent(DuelButtonActivity.this, SubjectHome.class));
     }
 }

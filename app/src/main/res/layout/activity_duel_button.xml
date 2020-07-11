@@ -10,7 +10,7 @@ android:id="@+id/dl_duel_Button_Activity">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DuelButtonActivity">
+    tools:context=".TestActivities.DuelButtonActivity">
 
     <Button
         android:id="@+id/buttonCount1"

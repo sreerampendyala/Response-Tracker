@@ -8,6 +8,7 @@ public class EntityClass {
     private String userIdInDb;
     private String subjectName;
     private String subjectEmail;
+    private boolean isSubject;
 
     private static EntityClass instance;
 
@@ -20,6 +21,14 @@ public class EntityClass {
 
     EntityClass() {
 
+    }
+
+    public boolean isSubject() {
+        return isSubject;
+    }
+
+    public void setSubject(boolean subject) {
+        isSubject = subject;
     }
 
     public String getSubjectName() {

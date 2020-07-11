@@ -1,4 +1,4 @@
-package com.example.responsecounter;
+package com.example.responsecounter.HomeActivites;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,16 +17,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.responsecounter.TestActivities.DuelButtonActivity;
+import com.example.responsecounter.MainActivity;
+import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
+import com.example.responsecounter.R;
+import com.example.responsecounter.MiscellaneousActivites.ReportActivity;
+import com.example.responsecounter.TestActivities.SingleButtonActivity;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
-import com.example.util.Interfaces.ImageInterface;
+import com.example.util.Interfaces.DataInterfaces.ImageInterface;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.rpc.Help;
 import com.squareup.picasso.Picasso;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class SubjectHome extends AppCompatActivity {
 
     private DrawerLayout dl;
     private ActionBarDrawerToggle toggle;
@@ -39,12 +44,12 @@ public class HomeActivity extends AppCompatActivity {
     private static final int GALLERY_CODE = 1;
     private Uri imageUri;
 
-    private final String TAG = "HomeActivity";
+    private final String TAG = "SubjectHome";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_subject_home);
 
         setNavigation();
 
@@ -105,7 +110,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setNavigation() {
-        dl = (DrawerLayout)findViewById(R.id.dl_Home_Activity);
+        dl = (DrawerLayout)findViewById(R.id.dl_Subject_Home_Activity);
         toggle = new ActionBarDrawerToggle(this, dl, R.string.Open, R.string.Close);
         toggle.setDrawerIndicatorEnabled(true);
         dl.addDrawerListener(toggle);
@@ -120,38 +125,38 @@ public class HomeActivity extends AppCompatActivity {
                 switch (id) {
                     case (R.id.duelButton): {
                         dl.closeDrawers();
-                        startActivity(new Intent(HomeActivity.this, DuelButtonActivity.class));
+                        startActivity(new Intent(SubjectHome.this, DuelButtonActivity.class));
                         break;
                     }
 
                     case (R.id.singleButton) : {
                         dl.closeDrawers();
-                        startActivity(new Intent(HomeActivity.this, SingleButtonActivity.class));
+                        startActivity(new Intent(SubjectHome.this, SingleButtonActivity.class));
                         break;
                     }
 
                     case (R.id.report) : {
                         dl.closeDrawers();
-                        startActivity(new Intent(HomeActivity.this, ReportActivity.class));
+                        startActivity(new Intent(SubjectHome.this, ReportActivity.class));
                         break;
                     }
 
                     case (R.id.note) :{
                         dl.closeDrawers();
-                        startActivity(new Intent(HomeActivity.this, NoteActivity.class));
+                        startActivity(new Intent(SubjectHome.this, NoteActivity.class));
                         break;
                     }
 
                     case (R.id.myhelp) : {
                         dl.closeDrawers();
-                        startActivity(new Intent(HomeActivity.this, Help.class));
+                        startActivity(new Intent(SubjectHome.this, Help.class));
                         break;
                     }
 
                     case(R.id.signOut) : {
                         dl.closeDrawers();
                         new DatabaseConnector().firebaseSignOut();
-                        startActivity(new Intent(HomeActivity.this, MainActivity.class));
+                        startActivity(new Intent(SubjectHome.this, MainActivity.class));
                         break;
                     }
 
@@ -178,9 +183,9 @@ public class HomeActivity extends AppCompatActivity {
                 try {
                     updateDb(imageUri);
                 } catch (Exception e) {
-                    Log.d("HomeActivity", "onActivityResult: during storage" + e.getMessage().toString());
-                    Toast.makeText(HomeActivity.this, "Error Updating picture", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(HomeActivity.this, AppHomeActivity.class));
+                    Log.d("SubjectHome", "onActivityResult: during storage" + e.getMessage().toString());
+                    Toast.makeText(SubjectHome.this, "Error Updating picture", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(SubjectHome.this, PhysicianHome.class));
                 }
 
             }
@@ -200,7 +205,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String errMessage) {
-                Toast.makeText(HomeActivity.this, errMessage, Toast.LENGTH_LONG).show();
+                Toast.makeText(SubjectHome.this, errMessage, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -209,7 +214,7 @@ public class HomeActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         if(backButtonCount >= 1)  {
-            startActivity(new Intent(HomeActivity.this, AppHomeActivity.class));
+            startActivity(new Intent(SubjectHome.this, PhysicianHome.class));
         } else {
             Toast.makeText(this, "Press the back button once again to go to APP Home.", Toast.LENGTH_SHORT).show();
             backButtonCount++;

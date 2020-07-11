@@ -1,4 +1,4 @@
-package com.example.responsecounter;
+package com.example.responsecounter.HomeActivites;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -14,13 +14,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.responsecounter.MainActivity;
+import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
-import com.example.util.Interfaces.SubjectInterface;
+import com.example.util.Interfaces.ValidationInterfaces.SubjectInterface;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
-public class AppHomeActivity extends AppCompatActivity {
+public class PhysicianHome extends AppCompatActivity {
 
     private int backButtonCount = 0;
     private DrawerLayout dl;
@@ -31,13 +32,13 @@ public class AppHomeActivity extends AppCompatActivity {
     private TextView subjectName;
     private TextView subjectId;
     private TextView userName;
-    private final String TAG = "AppHomeActivity";
+    private final String TAG = "PhysicianHome";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_home);
+        setContentView(R.layout.activity_physician_home);
 
         setUpNavigation();
 
@@ -58,20 +59,20 @@ public class AppHomeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (TextUtils.isEmpty(subjectId.getText().toString()) || TextUtils.isEmpty(subjectName.getText().toString())) {
-                    Toast.makeText(AppHomeActivity.this, "Feilds cannot be empty", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PhysicianHome.this, "Feilds cannot be empty", Toast.LENGTH_LONG).show();
                 } else {
                     DatabaseConnector obj = new DatabaseConnector();
                     obj.checkExistingSubject(subjectId.getText().toString(), subjectName.getText().toString(), new SubjectInterface() {
                         @Override
                         public void subjectExistOrCreated(boolean isSuccess) {
                             if(isSuccess) {
-                                startActivity(new Intent(AppHomeActivity.this, HomeActivity.class));
+                                startActivity(new Intent(PhysicianHome.this, SubjectHome.class));
                             }
                         }
 
                         @Override
                         public void onFailure(String errMessage) {
-                            Toast.makeText(AppHomeActivity.this, errMessage, Toast.LENGTH_LONG).show();
+                            Toast.makeText(PhysicianHome.this, errMessage, Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -84,20 +85,20 @@ public class AppHomeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (TextUtils.isEmpty(subjectId.getText().toString()) || TextUtils.isEmpty(subjectName.getText().toString())) {
-                    Toast.makeText(AppHomeActivity.this, "Feilds cannot be empty", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PhysicianHome.this, "Feilds cannot be empty", Toast.LENGTH_LONG).show();
                 } else {
                     DatabaseConnector db = new DatabaseConnector();
                     db.createNewSubject(subjectId.getText().toString(), subjectName.getText().toString(), new SubjectInterface() {
                         @Override
                         public void subjectExistOrCreated(boolean isSuccess) {
                             if(isSuccess) {
-                                startActivity(new Intent(AppHomeActivity.this, HomeActivity.class));
+                                startActivity(new Intent(PhysicianHome.this, SubjectHome.class));
                             }
                         }
 
                         @Override
                         public void onFailure(String errMessage) {
-                            Toast.makeText(AppHomeActivity.this, errMessage, Toast.LENGTH_LONG).show();
+                            Toast.makeText(PhysicianHome.this, errMessage, Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -110,7 +111,7 @@ public class AppHomeActivity extends AppCompatActivity {
 
     private void setUpNavigation() {
 
-        dl = (DrawerLayout)findViewById(R.id.dl_app_home);
+        dl = (DrawerLayout)findViewById(R.id.dl_physician_home);
         toggle = new ActionBarDrawerToggle(this, dl, R.string.Open, R.string.Close);
         toggle.setDrawerIndicatorEnabled(true);
         dl.addDrawerListener(toggle);
@@ -127,7 +128,7 @@ public class AppHomeActivity extends AppCompatActivity {
                     case(R.id.signOut) : {
                         dl.closeDrawers();
                         new DatabaseConnector().firebaseSignOut();
-                        startActivity(new Intent(AppHomeActivity.this, MainActivity.class));
+                        startActivity(new Intent(PhysicianHome.this, MainActivity.class));
                         break;
                     }
                 }

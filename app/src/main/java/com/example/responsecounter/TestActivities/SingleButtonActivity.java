@@ -1,4 +1,4 @@
-package com.example.responsecounter;
+package com.example.responsecounter.TestActivities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,6 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.responsecounter.MainActivity;
+import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
+import com.example.responsecounter.R;
+import com.example.responsecounter.MiscellaneousActivites.ReportActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.rpc.Help;
