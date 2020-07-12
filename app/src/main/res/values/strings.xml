@@ -7,4 +7,11 @@
     <string name="patient_MainActivity">Patient</string>
     <string name="physician_MainActivity">Physician</string>
     <string name="please_choose_physician_login_or_patient_login">Please Choose Physician Login or Patient Login</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_age">Enter Age</string>
+    <string name="create_password">Create Password</string>
+    <string name="re_enter_the_password">Re enter the Password</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_physician_email">Enter Physician Email</string>
+    <string name="create_account">Create Account</string>
 </resources>

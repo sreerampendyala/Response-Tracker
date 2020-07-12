@@ -17,7 +17,9 @@ import com.example.responsecounter.HomeActivites.PhysicianHome;
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.R;
 import com.example.responsecounter.SignUpActivities.PhysicianSignUpActivity;
+import com.example.responsecounter.SignUpActivities.SubjectSignUpActivity;
 import com.example.util.DatabaseConnector;
+import com.example.util.EntityClass;
 import com.example.util.Interfaces.ValidationInterfaces.CheckLoggedInInterface;
 import com.example.util.Interfaces.ValidationInterfaces.CredValidationInterface;
 
@@ -43,13 +45,6 @@ public class SignInActivity extends AppCompatActivity {
         pwd = findViewById(R.id.pwd_tb);
         pgr = findViewById(R.id.signIn_Progress);
 
-        new DatabaseConnector().checkAlreadyLogin(new CheckLoggedInInterface() {
-            @Override
-            public void isLoggedIn(boolean status) {
-                if(status) startActivity(new Intent(SignInActivity.this, PhysicianHome.class));
-            }
-        });
-
         signInbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +63,9 @@ public class SignInActivity extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, PhysicianSignUpActivity.class));
+                if(EntityClass.getInstance().isSubject()) {
+                    startActivity(new Intent(SignInActivity.this, SubjectSignUpActivity.class));
+                } else startActivity(new Intent(SignInActivity.this, PhysicianSignUpActivity.class));
             }
         });
     }
@@ -100,6 +97,17 @@ public class SignInActivity extends AppCompatActivity {
             Log.d("MainActivity", "checkCreds: " + e.getMessage());
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new DatabaseConnector().checkAlreadyLogin(new CheckLoggedInInterface() {
+            @Override
+            public void isLoggedIn(boolean status) {
+                if(status) startActivity(new Intent(SignInActivity.this, PhysicianHome.class));
+            }
+        });
     }
 
     @Override

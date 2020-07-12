@@ -20,7 +20,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -165,50 +164,83 @@ public class DatabaseConnector {
 
     /**
      * This method can be used to create a new Physician account.
-     * @param email Email of the user
-     * @param password Password of the User
-     * @param userId  userID
+     * @param loginEmail Email of the user
+     * @param loginPassword Password of the User
+     * @param loginUserName  userID
      * @param listner Interface for callbacks, SignupInterface
      */
-    public void createUserAccount(String email, String password, final String userId, final SignUpInterface listner) {
-        collectionReference = db.collection("Users");
+    public void createUserAccount(final String loginEmail, final String loginPassword, final String loginUserName, final SignUpInterface listner) {
+
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+        firebaseAuth.createUserWithEmailAndPassword(loginEmail, loginPassword)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if(task.isSuccessful()){
+                        if(task.isSuccessful()) {
                             currentUser = FirebaseAuth.getInstance().getCurrentUser();
                             assert currentUser!= null;
                             final String currentUserId = currentUser.getUid();
-
-                            Map<String, String> userMap = new HashMap<>();
+                            final Map<String, String> userMap = new HashMap<>();
                             userMap.put("UserIdInDB", currentUserId);
-                            userMap.put("UserName", userId);
+                            userMap.put("UserName", loginUserName);
 
-                            collectionReference.add(userMap)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                        @Override
-                                        public void onSuccess(DocumentReference documentReference) {
-                                            documentReference.get()
-                                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                            if(task.getResult().exists()) {
+                            final String collectionName = "Data";
+                            if (EntityClass.getInstance().isSubject()) {
+                                if (EntityClass.getInstance().getPhysicianEmail() != null && EntityClass.getInstance().getPhysicianEmail() != "") {
+                                    db.document("Data/" + EntityClass.getInstance().getPhysicianEmail())
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if(task.getResult().exists()) {
+                                                        final DocumentSnapshot documentSnapshot = task.getResult();
+                                                        task.getResult().getReference()
+                                                                .collection(loginEmail)
+                                                                .document("SubjectData")
+                                                                .set(userMap)
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        String collectionName = "Map";
 
-                                                                String name = task.getResult().getString("UserName");
-
-                                                                EntityClass entityObj = EntityClass.getInstance();
-                                                                entityObj.setUserName(name);
-                                                                entityObj.setUserIdInDb(currentUserId);
-                                                                listner.signUpStatus(true);
+                                                                        Map<String, String> newMap = new HashMap<>();
+                                                                        newMap.put("UserIdInDB", currentUserId);
+                                                                        newMap.put("physicianEmail", EntityClass.getInstance().getPhysicianEmail());
+                                                                        collectionReference = db.collection(collectionName);
+                                                                        collectionReference.document(loginEmail).set(newMap)
+                                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(Void aVoid) {
+                                                                                        EntityClass entityObj = EntityClass.getInstance();
+                                                                                        entityObj.setUserName(loginUserName);
+                                                                                        entityObj.setUserIdInDb(currentUserId);
+                                                                                        listner.signUpStatus(true);
+                                                                                    }
+                                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                Log.d(TAG, "onFailure: " + e.getMessage());
+                                                                                listner.signUpStatus(false);
+                                                                                listner.onFailure(e.getMessage());
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.d(TAG, "onFailure: " + e.getMessage());
+                                                                listner.signUpStatus(false);
+                                                                listner.onFailure(e.getMessage());
                                                             }
-                                                        }
-                                                    });
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
+                                                        });
+                                                    } else {
+                                                        firebaseAuth.getCurrentUser().delete();
+                                                        Log.d(TAG, "onComplete: Unable to find the Physician Email");
+                                                        listner.signUpStatus(false);
+                                                        listner.onFailure("Unable to find the Physician Email");
+                                                    }
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Log.d(TAG, "onFailure: " + e.getMessage());
@@ -216,17 +248,42 @@ public class DatabaseConnector {
                                             listner.onFailure(e.getMessage());
                                         }
                                     });
+                                    
+                                } else {
+                                    // code for patients without physicians.
+                                }
+                            } else {
+                                // for physicians
+                                collectionReference = db.collection(collectionName);
+                                collectionReference.document(loginEmail).set(userMap)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                EntityClass entityObj = EntityClass.getInstance();
+                                                entityObj.setUserName(loginUserName);
+                                                entityObj.setUserIdInDb(currentUserId);
+                                                listner.signUpStatus(true);
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d(TAG, "onFailure: " + e.getMessage());
+                                        listner.signUpStatus(false);
+                                        listner.onFailure(e.getMessage());
+                                    }
+                                });
+                            }
                         }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "onFailure: " + e.getMessage());
-                        listner.signUpStatus(false);
-                        listner.onFailure(e.getMessage());
-                    }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: " + e.getMessage());
+                listner.signUpStatus(false);
+                listner.onFailure(e.getMessage());
+            }
+        });
+
     }
 
     /**

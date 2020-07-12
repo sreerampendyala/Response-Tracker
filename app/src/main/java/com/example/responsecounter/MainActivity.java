@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EntityClass.getInstance().setPhysicianEmail("");
+    }
+
+    @Override
     public void onBackPressed()
     {
         if(backButtonCount >= 1)  {

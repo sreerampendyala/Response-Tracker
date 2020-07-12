@@ -8,6 +8,7 @@ public class EntityClass {
     private String userIdInDb;
     private String subjectName;
     private String subjectEmail;
+    private String physicianEmail;
     private boolean isSubject;
 
     private static EntityClass instance;
@@ -21,6 +22,14 @@ public class EntityClass {
 
     EntityClass() {
 
+    }
+
+    public String getPhysicianEmail() {
+        return physicianEmail;
+    }
+
+    public void setPhysicianEmail(String physicianEmail) {
+        this.physicianEmail = physicianEmail;
     }
 
     public boolean isSubject() {

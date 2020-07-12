@@ -40,8 +40,6 @@ public class PhysicianSignUpActivity extends AppCompatActivity {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 createEmailUserAccount(userEmail.getText().toString(), pwd.getText().toString(), userId.getText().toString());
             }
         });
