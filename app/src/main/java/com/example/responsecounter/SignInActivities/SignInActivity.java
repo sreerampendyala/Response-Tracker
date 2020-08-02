@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.responsecounter.HomeActivites.PhysicianHome;
+import com.example.responsecounter.HomeActivites.SubjectHome;
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.R;
 import com.example.responsecounter.SignUpActivities.PhysicianSignUpActivity;
@@ -80,7 +81,9 @@ public class SignInActivity extends AppCompatActivity {
                 public void onSuccessValidatingCredentials(boolean isSuccess) {
                     if(isSuccess) {
                         pgr.setVisibility(View.INVISIBLE);
-                        startActivity(new Intent(SignInActivity.this, PhysicianHome.class));
+                        if(EntityClass.getInstance().isSubject()) {
+                            startActivity(new Intent(SignInActivity.this, SubjectHome.class));
+                        } else startActivity(new Intent(SignInActivity.this, PhysicianHome.class));
                     }
                 }
 
