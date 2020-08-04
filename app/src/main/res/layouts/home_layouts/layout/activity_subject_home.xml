@@ -11,7 +11,7 @@
         android:id="@+id/id_view_Home_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background"
+        android:background="@color/cardview_light_background"
         tools:context=".HomeActivites.SubjectHome">
 
         <ImageView
@@ -58,9 +58,9 @@
             android:id="@+id/changePic_tv"
             android:layout_width="170dp"
             android:layout_height="36dp"
-            android:fontFamily="@font/alegreya_sans_sc_extrabold"
+            android:fontFamily="@font/times_new_roman_400"
             android:text="Change Picture"
-            android:textColor="#AFB42B"
+            android:textColor="#303F9F"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,25 +78,25 @@
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.711"
+            app:layout_constraintHorizontal_bias="0.473"
             app:layout_constraintStart_toEndOf="@+id/sub_id_tv"
             app:layout_constraintTop_toBottomOf="@+id/changePic_tv"
-            app:layout_constraintVertical_bias="0.379" />
+            app:layout_constraintVertical_bias="0.136" />
 
         <TextView
             android:id="@+id/sub_id_tv"
             android:layout_width="62dp"
             android:layout_height="24dp"
-            android:fontFamily="@font/alegreya_sans_sc_extrabold"
+            android:fontFamily="@font/times_new_roman_400"
             android:text="Id"
-            android:textColor="#AFB42B"
+            android:textColor="#303F9F"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.214"
+            app:layout_constraintHorizontal_bias="0.24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/changePic_tv"
-            app:layout_constraintVertical_bias="0.37" />
+            app:layout_constraintVertical_bias="0.136" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_View_Home"

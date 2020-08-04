@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.util.Interfaces.DataInterfaces.DataSaveInterface;
+import com.example.util.Interfaces.DataInterfaces.SubjectList;
 import com.example.util.Interfaces.ValidationInterfaces.CheckLoggedInInterface;
 import com.example.util.Interfaces.ValidationInterfaces.CredValidationInterface;
 import com.example.util.Interfaces.DataInterfaces.ImageInterface;
@@ -29,7 +30,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DatabaseConnector {
@@ -101,10 +104,13 @@ public class DatabaseConnector {
      * @param password Password linked with the email.
      * @param listner for callbacks, CredValidationInterface
      */
-    public void validateLogin(String email, String password, final CredValidationInterface listner) {
+    public void validateLogin(final String email, String password, final CredValidationInterface listner) {
 
-        collectionReference = db.collection("Users");
+        collectionReference = db.collection("Data");
         firebaseAuth = FirebaseAuth.getInstance();
+        if(!EntityClass.getInstance().isSubject()) EntityClass.getInstance().setPhysicianEmail(email);
+        else EntityClass.getInstance().setSubjectEmail(email);
+
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -114,27 +120,20 @@ public class DatabaseConnector {
                             currentUser = FirebaseAuth.getInstance().getCurrentUser();
                             final String currentUserId = currentUser.getUid();
                             Log.d(TAG, "onComplete: " + currentUserId);
-                            collectionReference.whereEqualTo("UserIdInDB", currentUserId).get()
-                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            collectionReference.document(email).get()
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                         @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            boolean recordNotExists = true;
-                                            for (QueryDocumentSnapshot snapshots: queryDocumentSnapshots) {
-                                                String userId = snapshots.getString("UserIdInDB");
-
-                                                recordNotExists = false;
-
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            if(documentSnapshot.exists()) {
                                                 EntityClass entityObj = EntityClass.getInstance();
-                                                entityObj.setUserName(snapshots.getString("UserName"));
+                                                entityObj.setUserName(documentSnapshot.getString("UserName"));
                                                 entityObj.setUserIdInDb(currentUserId);
                                                 listner.onSuccessValidatingCredentials(true);
-                                            }
-                                            if(recordNotExists){
+                                            } else {
                                                 Log.d("Database Connector", "onSuccess: validateLogin| Record not exist.");
                                                 listner.onFailure("Record not exists");
                                                 listner.onSuccessValidatingCredentials(false);
                                             }
-
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -194,27 +193,40 @@ public class DatabaseConnector {
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                     if(task.getResult().exists()) {
                                                         final DocumentSnapshot documentSnapshot = task.getResult();
-                                                        task.getResult().getReference()
-                                                                .collection(loginEmail)
-                                                                .document("SubjectData")
-                                                                .set(userMap)
+                                                        task.getResult().getReference().update(loginEmail, loginUserName)
                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                     @Override
                                                                     public void onSuccess(Void aVoid) {
-                                                                        String collectionName = "Map";
-
-                                                                        Map<String, String> newMap = new HashMap<>();
-                                                                        newMap.put("UserIdInDB", currentUserId);
-                                                                        newMap.put("physicianEmail", EntityClass.getInstance().getPhysicianEmail());
-                                                                        collectionReference = db.collection(collectionName);
-                                                                        collectionReference.document(loginEmail).set(newMap)
+                                                                        documentSnapshot.getReference()
+                                                                                .collection(loginEmail)
+                                                                                .document("SubjectData")
+                                                                                .set(userMap)
                                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                     @Override
                                                                                     public void onSuccess(Void aVoid) {
-                                                                                        EntityClass entityObj = EntityClass.getInstance();
-                                                                                        entityObj.setUserName(loginUserName);
-                                                                                        entityObj.setUserIdInDb(currentUserId);
-                                                                                        listner.signUpStatus(true);
+                                                                                        String collectionName = "Map";
+
+                                                                                        Map<String, String> newMap = new HashMap<>();
+                                                                                        newMap.put("UserIdInDB", currentUserId);
+                                                                                        newMap.put("physicianEmail", EntityClass.getInstance().getPhysicianEmail());
+                                                                                        collectionReference = db.collection(collectionName);
+                                                                                        collectionReference.document(loginEmail).set(newMap)
+                                                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                    @Override
+                                                                                                    public void onSuccess(Void aVoid) {
+                                                                                                        EntityClass entityObj = EntityClass.getInstance();
+                                                                                                        entityObj.setUserName(loginUserName);
+                                                                                                        entityObj.setUserIdInDb(currentUserId);
+                                                                                                        listner.signUpStatus(true);
+                                                                                                    }
+                                                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                                                            @Override
+                                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                                Log.d(TAG, "onFailure: " + e.getMessage());
+                                                                                                listner.signUpStatus(false);
+                                                                                                listner.onFailure(e.getMessage());
+                                                                                            }
+                                                                                        });
                                                                                     }
                                                                                 }).addOnFailureListener(new OnFailureListener() {
                                                                             @Override
@@ -225,14 +237,15 @@ public class DatabaseConnector {
                                                                             }
                                                                         });
                                                                     }
-                                                                }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Log.d(TAG, "onFailure: " + e.getMessage());
-                                                                listner.signUpStatus(false);
-                                                                listner.onFailure(e.getMessage());
-                                                            }
-                                                        });
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        Log.d(TAG, "onFailure: " + e.getMessage());
+                                                                        listner.signUpStatus(false);
+                                                                        listner.onFailure(e.getMessage());
+                                                                    }
+                                                                });
                                                     } else {
                                                         firebaseAuth.getCurrentUser().delete();
                                                         Log.d(TAG, "onComplete: Unable to find the Physician Email");
@@ -284,6 +297,40 @@ public class DatabaseConnector {
             }
         });
 
+    }
+
+    /**
+     * This method can be used to get the list of all the patients under a physician.
+     * @param listner Interface for callbacks, SubjectList interface.
+     */
+    public void getSubjectsList(final SubjectList listner){
+
+        String path = "Data/" + EntityClass.getInstance().getPhysicianEmail();
+        db.document(path)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful() && task.getResult().exists()) {
+                            List<String> subjectData = new ArrayList<String>();
+
+                            for (Map.Entry<String, Object> subjectsList: task.getResult().getData().entrySet()) {
+                                if(subjectsList.getKey() == "UserName" || subjectsList.getKey() == "UserIdInDB") continue;
+                                subjectData.add(subjectsList.getValue() + "\n" + subjectsList.getKey());
+                            }
+                            listner.getSubjectListStatus(true, subjectData);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        List<String> subjectData = new ArrayList<String>();
+                        Log.d(TAG, "onFailure: GetSubjectList" + e.getMessage());
+                        listner.getSubjectListStatus(false, subjectData);
+                        listner.onFailure(e.getMessage());
+                    }
+                });
     }
 
     /**

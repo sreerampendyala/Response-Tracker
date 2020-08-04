@@ -10,7 +10,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,8 +22,11 @@ import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
+import com.example.util.Interfaces.DataInterfaces.SubjectList;
 import com.example.util.Interfaces.ValidationInterfaces.SubjectInterface;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
 
 public class PhysicianHome extends AppCompatActivity {
 
@@ -27,11 +34,9 @@ public class PhysicianHome extends AppCompatActivity {
     private DrawerLayout dl;
     private ActionBarDrawerToggle toggle;
 
-    private Button existingSubject;
-    private Button newSubject;
-    private TextView subjectName;
-    private TextView subjectId;
+    private Button submitBtn;
     private TextView userName;
+    private AutoCompleteTextView autoCompleteTextView;
     private final String TAG = "PhysicianHome";
 
 
@@ -41,11 +46,8 @@ public class PhysicianHome extends AppCompatActivity {
         setContentView(R.layout.activity_physician_home);
 
         setUpNavigation();
-
-        existingSubject = findViewById(R.id.existingUsr_btn);
-        newSubject = findViewById(R.id.newUser_btn);
-        subjectName = findViewById(R.id.subjectName_tb);
-        subjectId = findViewById(R.id.subjectid_tb);
+        updateDropDown();
+        submitBtn = findViewById(R.id.submit_btn_physicianHome);
         userName = findViewById(R.id.username_tv);
 
 
@@ -54,61 +56,18 @@ public class PhysicianHome extends AppCompatActivity {
         obj.setSubjectName("");
         obj.setSubjectEmail("");
 
-        existingSubject.setOnClickListener(new View.OnClickListener() {
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (TextUtils.isEmpty(subjectId.getText().toString()) || TextUtils.isEmpty(subjectName.getText().toString())) {
-                    Toast.makeText(PhysicianHome.this, "Feilds cannot be empty", Toast.LENGTH_LONG).show();
-                } else {
-                    DatabaseConnector obj = new DatabaseConnector();
-                    obj.checkExistingSubject(subjectId.getText().toString(), subjectName.getText().toString(), new SubjectInterface() {
-                        @Override
-                        public void subjectExistOrCreated(boolean isSuccess) {
-                            if(isSuccess) {
-                                startActivity(new Intent(PhysicianHome.this, SubjectHome.class));
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(String errMessage) {
-                            Toast.makeText(PhysicianHome.this, errMessage, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
             }
         });
-
-
-        newSubject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (TextUtils.isEmpty(subjectId.getText().toString()) || TextUtils.isEmpty(subjectName.getText().toString())) {
-                    Toast.makeText(PhysicianHome.this, "Feilds cannot be empty", Toast.LENGTH_LONG).show();
-                } else {
-                    DatabaseConnector db = new DatabaseConnector();
-                    db.createNewSubject(subjectId.getText().toString(), subjectName.getText().toString(), new SubjectInterface() {
-                        @Override
-                        public void subjectExistOrCreated(boolean isSuccess) {
-                            if(isSuccess) {
-                                startActivity(new Intent(PhysicianHome.this, SubjectHome.class));
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(String errMessage) {
-                            Toast.makeText(PhysicianHome.this, errMessage, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
-
-
     }
 
-
+    /**
+     * This method is used to set the navbar.
+     */
     private void setUpNavigation() {
 
         dl = (DrawerLayout)findViewById(R.id.dl_physician_home);
@@ -135,6 +94,39 @@ public class PhysicianHome extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    /**
+     * This method is used to update the drop down.
+     */
+    private void updateDropDown(){
+        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.dropDownTextView_physicianHome);
+
+
+        DatabaseConnector databaseConnector = new DatabaseConnector();
+        databaseConnector.getSubjectsList(new SubjectList() {
+            @Override
+            public void getSubjectListStatus(boolean isSuccess, List<String> subjectData) {
+                if(isSuccess && !subjectData.isEmpty()){
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(PhysicianHome.this, android.R.layout.simple_list_item_1, subjectData);
+                    adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                    autoCompleteTextView.setThreshold(1);
+                    autoCompleteTextView.setAdapter(adapter);
+
+                    String[] items = new String[subjectData.size()];
+                    for(int i = 0; i< subjectData.size(); i++) {
+                        items[i] = subjectData.get(i);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String errMessage) {
+                //
+            }
+        });
+
+
     }
 
     @Override
