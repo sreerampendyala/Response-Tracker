@@ -52,6 +52,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 if(!TextUtils.isEmpty(email.getText().toString()) && !TextUtils.isEmpty(pwd.getText().toString())) {
                     pgr.setVisibility(View.VISIBLE);
+                    signInbtn.setEnabled(false);
                     checkCreds(email.getText().toString(), pwd.getText().toString());
                 } else {
                     Toast.makeText(SignInActivity.this, "Feilds Should not be empty", Toast.LENGTH_LONG).show();
@@ -81,6 +82,7 @@ public class SignInActivity extends AppCompatActivity {
                 public void onSuccessValidatingCredentials(boolean isSuccess) {
                     if(isSuccess) {
                         pgr.setVisibility(View.INVISIBLE);
+                        signInbtn.setEnabled(true);
                         if(EntityClass.getInstance().isSubject()) {
                             startActivity(new Intent(SignInActivity.this, SubjectHome.class));
                         } else startActivity(new Intent(SignInActivity.this, PhysicianHome.class));
@@ -90,6 +92,7 @@ public class SignInActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(String errMessage) {
                     pgr.setVisibility(View.INVISIBLE);
+                    signInbtn.setEnabled(true);
                     Log.d(TAG, "onFailure: Failed validating credentials from the database" + errMessage);
                     Toast.makeText(SignInActivity.this, errMessage, Toast.LENGTH_LONG).show();
                 }
@@ -97,6 +100,7 @@ public class SignInActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             pgr.setVisibility(View.INVISIBLE);
+            signInbtn.setEnabled(true);
             Log.d("MainActivity", "checkCreds: " + e.getMessage());
         }
 

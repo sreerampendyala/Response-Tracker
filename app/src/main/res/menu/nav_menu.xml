@@ -17,6 +17,10 @@
         android:title="Journal"
         android:icon="@drawable/ic_rate_review_black_24dp" />
     <item
+        android:id="@+id/settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings_black_24dp"/>
+    <item
         android:id="@+id/myhelp"
         android:title="Help"
         android:icon="@drawable/ic_help_black_24dp" />

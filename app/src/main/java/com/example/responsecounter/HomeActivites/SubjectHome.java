@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.responsecounter.MiscellaneousActivites.settingsActivity;
 import com.example.responsecounter.TestActivities.DuelButtonActivity;
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
@@ -144,6 +145,12 @@ public class SubjectHome extends AppCompatActivity {
                     case (R.id.note) :{
                         dl.closeDrawers();
                         startActivity(new Intent(SubjectHome.this, NoteActivity.class));
+                        break;
+                    }
+
+                    case (R.id.settings) : {
+                        dl.closeDrawers();
+                        startActivity(new Intent(SubjectHome.this, settingsActivity.class));
                         break;
                     }
 

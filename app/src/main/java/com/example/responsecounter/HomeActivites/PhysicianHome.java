@@ -13,10 +13,10 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +43,7 @@ public class PhysicianHome extends AppCompatActivity {
 
     private String subjectName;
     private final String TAG = "PhysicianHome";
-
+    private ProgressBar pgr;
 
 
     @Override
@@ -55,7 +55,7 @@ public class PhysicianHome extends AppCompatActivity {
         updateDropDown();
         submitBtn = findViewById(R.id.submit_btn_physicianHome);
         userName = findViewById(R.id.username_tv);
-
+        pgr = findViewById(R.id.physicianHome_Progress);
 
         EntityClass obj = EntityClass.getInstance();
         userName.setText(obj.getUserName());
@@ -69,18 +69,23 @@ public class PhysicianHome extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(!TextUtils.isEmpty(autoCompleteTextView.getText().toString())) {
+                    pgr.setVisibility(View.VISIBLE);
+                    submitBtn.setEnabled(false);
                     DatabaseConnector databaseConnector = new DatabaseConnector();
                     databaseConnector.checkExistingSubject(autoCompleteTextView.getText().toString(), subjectName, new SubjectInterface() {
                         @Override
                         public void subjectExistOrCreated(boolean isSuccess) {
                             if(isSuccess) {
+                                pgr.setVisibility(View.INVISIBLE);
+                                submitBtn.setEnabled(true);
                                 startActivity(new Intent(PhysicianHome.this, SubjectHome.class));
                             }
                         }
 
                         @Override
                         public void onFailure(String errMessage) {
-                            //
+                            pgr.setVisibility(View.INVISIBLE);
+                            submitBtn.setEnabled(true);
                         }
                     });
                 }

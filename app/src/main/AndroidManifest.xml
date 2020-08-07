@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".SignInActivities.SignInActivity"></activity>
+        <activity android:name=".MiscellaneousActivites.settingsActivity"></activity>
+        <activity android:name=".SignInActivities.SignInActivity" />
         <activity android:name=".SignUpActivities.SubjectSignUpActivity" />
         <activity android:name=".HomeActivites.PhysicianHome" />
         <activity android:name=".MiscellaneousActivites.HelpActivity" />

@@ -11,6 +11,16 @@
         android:layout_height="match_parent"
         android:background="@color/cardview_light_background"
         tools:context=".HomeActivites.PhysicianHome">
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/physicianHome_Progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="175dp"
+            android:layout_height="36dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="352dp"
