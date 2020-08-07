@@ -316,7 +316,7 @@ public class DatabaseConnector {
 
                             for (Map.Entry<String, Object> subjectsList: task.getResult().getData().entrySet()) {
                                 if(subjectsList.getKey() == "UserName" || subjectsList.getKey() == "UserIdInDB") continue;
-                                subjectData.add(subjectsList.getValue() + "\n" + subjectsList.getKey());
+                                subjectData.add(subjectsList.getValue() + "\n"+ "email:" + subjectsList.getKey());
                             }
                             listner.getSubjectListStatus(true, subjectData);
                         }
@@ -340,41 +340,44 @@ public class DatabaseConnector {
      * @param listner Interface for callbacks, SubjectInterface
      */
     public void checkExistingSubject(final String email, final String name, final SubjectInterface listner) {
-        collectionReference = db.collection("Users");
-
-        collectionReference.whereEqualTo("UserIdInDB", EntityClass.getInstance().getUserIdInDb()).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                        for (QueryDocumentSnapshot snapshots: queryDocumentSnapshots) {
-
-                            snapshots.getReference().collection(email).get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if(!task.getResult().isEmpty()) {
-                                                EntityClass.getInstance().setSubjectName(name);
-                                                EntityClass.getInstance().setSubjectEmail(email);
-                                                listner.subjectExistOrCreated(true);
-                                            } else {
-                                                Log.d(TAG, "onFailure: Unable to Find the User Record");
-                                                listner.subjectExistOrCreated(false);
-                                                listner.onFailure("Unable to Find the User Record");
-                                            }
-                                        }
-                                    });
+        collectionReference = db.collection("Data");
+        collectionReference.document(EntityClass.getInstance().getPhysicianEmail()).get()
+            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                documentSnapshot.getReference().collection(email).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(!task.getResult().isEmpty()) {
+                                EntityClass.getInstance().setSubjectName(name);
+                                EntityClass.getInstance().setSubjectEmail(email);
+                                listner.subjectExistOrCreated(true);
+                            } else {
+                                Log.d(TAG, "onFailure: Unable to Find the User Record");
+                                listner.subjectExistOrCreated(false);
+                                listner.onFailure("Unable to Find the User Record");
+                            }
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "onFailure: " + e.getMessage());
-                        listner.subjectExistOrCreated(false);
-                        listner.onFailure(e.getMessage());
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: " + e.getMessage());
+                            listner.subjectExistOrCreated(false);
+                            listner.onFailure(e.getMessage());
+                        }
+                    });
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: " + e.getMessage());
+                    listner.subjectExistOrCreated(false);
+                    listner.onFailure(e.getMessage());
+                }
+            });
 
     }
 
@@ -385,7 +388,7 @@ public class DatabaseConnector {
      * @param listner Interface for the callbacks, SubjectInterface
      */
     public void createNewSubject(final String email, final String name, final SubjectInterface listner) {
-        collectionReference = db.collection("Users");
+        collectionReference = db.collection("Data");
 
         collectionReference.whereEqualTo("UserIdInDB", EntityClass.getInstance().getUserIdInDb()).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

@@ -7,7 +7,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,7 +40,10 @@ public class PhysicianHome extends AppCompatActivity {
     private Button submitBtn;
     private TextView userName;
     private AutoCompleteTextView autoCompleteTextView;
+
+    private String subjectName;
     private final String TAG = "PhysicianHome";
+
 
 
     @Override
@@ -56,11 +62,50 @@ public class PhysicianHome extends AppCompatActivity {
         obj.setSubjectName("");
         obj.setSubjectEmail("");
 
+        autoCompleteTextView.getText().clear();
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                if(!TextUtils.isEmpty(autoCompleteTextView.getText().toString())) {
+                    DatabaseConnector databaseConnector = new DatabaseConnector();
+                    databaseConnector.checkExistingSubject(autoCompleteTextView.getText().toString(), subjectName, new SubjectInterface() {
+                        @Override
+                        public void subjectExistOrCreated(boolean isSuccess) {
+                            if(isSuccess) {
+                                startActivity(new Intent(PhysicianHome.this, SubjectHome.class));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(String errMessage) {
+                            //
+                        }
+                    });
+                }
+
+            }
+        });
+
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // not used
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // not used
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().split("email:").length == 2) {
+                    subjectName = s.toString().split("email:")[0];
+                    Editable text = new SpannableStringBuilder(s.toString().split("email:")[1]);
+                    s.replace(0, s.length(), text);
+                }
             }
         });
     }

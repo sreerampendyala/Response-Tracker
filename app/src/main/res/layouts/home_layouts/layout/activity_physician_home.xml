@@ -22,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.44">
+            app:layout_constraintVertical_bias="0.37">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -33,12 +33,12 @@
                     style="@style/TextAppearance.AppCompat"
                     android:layout_width="337dp"
                     android:layout_height="60dp"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/textview_border"
                     android:fontFamily="@font/times_new_roman_400"
                     android:hint="@string/spinner_title"
-                    android:maxLines="2"
                     android:paddingLeft="14dp"
                     android:shadowColor="#303F9F"
+                    android:singleLine="true"
                     android:spinnerMode="dropdown"
                     android:textSize="19sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -57,7 +57,7 @@
             android:layout_width="319dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/times_new_roman_400"
-            android:text="Choose a Patient from the Drop Down"
+            android:text="Please Enter the Patient Name"
             android:textColor="#303F9F"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
