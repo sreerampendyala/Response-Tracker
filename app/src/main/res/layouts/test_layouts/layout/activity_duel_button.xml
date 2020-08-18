@@ -101,7 +101,7 @@ android:id="@+id/dl_duel_Button_Activity">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.0"
-    app:menu="@menu/nav_menu"
+    app:menu="@menu/nav_subject_menu"
     tools:visibility="visible">
 
 </com.google.android.material.navigation.NavigationView>

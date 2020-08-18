@@ -1,37 +1,50 @@
 package com.example.util.Models;
 
 public class SubjectDataModel {
-    private String Email;
-    private String Name;
-    private String Age;
+    private String subjectEmail;
+    private String subjectName;
+    private String subjectAge;
+    private String imageUri;
 
-    public String getEmail() {
-        return Email;
+    public String getSubjectEmail() {
+        return subjectEmail;
     }
 
-    public void setEmail(String email) {
-        Email = email;
+    public void setSubjectEmail(String subjectEmail) {
+        this.subjectEmail = subjectEmail;
     }
 
     public String getName() {
-        return Name;
+        return subjectName;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
-    public String getAge() {
-        return Age;
+    public String getSubjectAge() {
+        return subjectAge;
     }
 
-    public void setAge(String age) {
-        Age = age;
+    public void setSubjectAge(String subjectAge) {
+        this.subjectAge = subjectAge;
     }
 
-    public SubjectDataModel(String email, String name, String age) {
-        Email = email;
-        Name = name;
-        Age = age;
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public  SubjectDataModel() {
+
+    }
+
+    public SubjectDataModel(String subjectEmail, String subjectName, String subjectAge) {
+        this.subjectEmail = subjectEmail;
+        this.subjectName = subjectName;
+        this.subjectAge = subjectAge;
     }
 }

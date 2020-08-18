@@ -78,7 +78,7 @@ public class PhysicianHome extends AppCompatActivity {
                             if(isSuccess) {
                                 pgr.setVisibility(View.INVISIBLE);
                                 submitBtn.setEnabled(true);
-                                startActivity(new Intent(PhysicianHome.this, SubjectHome.class));
+                                startActivity(new Intent(PhysicianHome.this, PhysiciansSubjectHome.class));
                             }
                         }
 

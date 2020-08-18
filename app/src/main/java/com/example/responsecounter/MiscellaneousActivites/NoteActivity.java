@@ -51,24 +51,6 @@ public class NoteActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
-                    case (R.id.duelButton): {
-                        dl.closeDrawers();
-                        startActivity(new Intent(NoteActivity.this, DuelButtonActivity.class));
-                        break;
-                    }
-
-                    case (R.id.singleButton) : {
-                        dl.closeDrawers();
-                        startActivity(new Intent(NoteActivity.this, SingleButtonActivity.class));
-                        break;
-                    }
-
-                    case (R.id.report) : {
-                        dl.closeDrawers();
-                        startActivity(new Intent(NoteActivity.this, ReportActivity.class));
-                        break;
-                    }
-
                     case (R.id.note) :{
                         dl.closeDrawers();
                         startActivity(new Intent(NoteActivity.this, NoteActivity.class));
@@ -93,6 +75,7 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);

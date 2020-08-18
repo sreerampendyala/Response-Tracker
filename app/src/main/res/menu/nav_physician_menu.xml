@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/note"
+        android:title="@string/journal"
+        android:icon="@drawable/ic_rate_review_black_24dp" />
+    <item
+        android:id="@+id/report"
+        android:title="@string/reports"
+        android:icon="@drawable/ic_accessibility_black_24dp"/>
+    <item
+        android:id="@+id/myhelp"
+        android:title="@string/help"
+        android:icon="@drawable/ic_help_black_24dp" />
+    <item
+        android:id="@+id/signOut"
+        android:title="@string/sign_out"
+        android:icon="@drawable/ic_lock_outline_black_24dp"/>
+</menu>

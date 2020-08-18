@@ -20,58 +20,59 @@ import com.example.util.Interfaces.ValidationInterfaces.SignUpInterface;
 
 public class SubjectSignUpActivity extends AppCompatActivity {
 
-    private EditText subjectName;
-    private EditText subjectAge;
-    private EditText subjectEmail;
-    private EditText subjectPwd;
-    private EditText subjectRePwd;
-    private EditText physicianEmail;
+  private EditText subjectName;
+  private EditText subjectAge;
+  private EditText subjectEmail;
+  private EditText subjectPwd;
+  private EditText subjectRePwd;
+  private EditText physicianEmail;
 
-    private Button createAccountBtn;
+  private Button createAccountBtn;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subject_sign_up);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_subject_sign_up);
 
-        subjectName = findViewById(R.id.enterName_Subject_tv);
-        subjectAge = findViewById(R.id.enterAge_Subject_tv);
-        subjectEmail = findViewById(R.id.enterEmail_subject_tv);
-        subjectPwd = findViewById(R.id.enterPwd_Subject_tv);
-        subjectRePwd = findViewById(R.id.reEnterPwd_Subject_tv);
-        physicianEmail = findViewById(R.id.physicianEmail_Subject_tv);
+    subjectName = findViewById(R.id.enterName_Subject_tv);
+    subjectAge = findViewById(R.id.enterAge_Subject_tv);
+    subjectEmail = findViewById(R.id.enterEmail_subject_tv);
+    subjectPwd = findViewById(R.id.enterPwd_Subject_tv);
+    subjectRePwd = findViewById(R.id.reEnterPwd_Subject_tv);
+    physicianEmail = findViewById(R.id.physicianEmail_Subject_tv);
 
 
-        createAccountBtn = findViewById(R.id.createAccount_Subject_btn);
+    createAccountBtn = findViewById(R.id.createAccount_Subject_btn);
 
-        createAccountBtn.setOnClickListener(new View.OnClickListener() {
+    createAccountBtn.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+        if (!TextUtils.equals(subjectRePwd.getText().toString(), subjectPwd.getText().toString())) {
+          Toast.makeText(SubjectSignUpActivity.this, "Password miss match", Toast.LENGTH_LONG).show();
+        } else if (!TextUtils.isEmpty(subjectAge.getText().toString())) {
+          Toast.makeText(SubjectSignUpActivity.this, "Please fill in Age", Toast.LENGTH_LONG).show();
+        } else {
+          EntityClass.getInstance().setPhysicianEmail(physicianEmail.getText().toString());
+          EntityClass.getInstance().setSubjectAge(subjectAge.getText().toString());
+          DatabaseConnector dbObj = new DatabaseConnector();
+          dbObj.createUserAccount(subjectEmail.getText().toString(), subjectPwd.getText().toString(), subjectName.getText().toString(), new SignUpInterface() {
             @Override
-            public void onClick(View v) {
+            public void signUpStatus(boolean isSuccess) {
 
-                if(!TextUtils.equals(subjectRePwd.getText().toString(), subjectPwd.getText().toString())) {
-
-                    Toast.makeText(SubjectSignUpActivity.this, "Password miss match", Toast.LENGTH_LONG).show();
-                } else {
-                    EntityClass.getInstance().setPhysicianEmail(physicianEmail.getText().toString());
-
-                    DatabaseConnector dbObj = new DatabaseConnector();
-                    dbObj.createUserAccount(subjectEmail.getText().toString(), subjectPwd.getText().toString(), subjectName.getText().toString(), new SignUpInterface() {
-                        @Override
-                        public void signUpStatus(boolean isSuccess) {
-
-                            if(isSuccess) {
-                                startActivity(new Intent(SubjectSignUpActivity.this, SubjectHome.class));
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(String errMessage) {
-                            Toast.makeText(SubjectSignUpActivity.this, errMessage, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-
+              if (isSuccess) {
+                startActivity(new Intent(SubjectSignUpActivity.this, SubjectHome.class));
+              }
             }
-        });
-    }
+
+            @Override
+            public void onFailure(String errMessage) {
+              Toast.makeText(SubjectSignUpActivity.this, errMessage, Toast.LENGTH_LONG).show();
+            }
+          });
+        }
+
+      }
+    });
+  }
 }

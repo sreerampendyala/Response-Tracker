@@ -1,1 +1,12 @@
-<resources></resources>
+<resources>
+    <string name="test_activity_available">Test Activity Available</string>
+    <string name="report_available">Report Available</string>
+    <string name="active">Active</string>
+    <string name="please_setup_patient_access">Please setup patient access.</string>
+    <string name="submit">Submit</string>
+    <string name="journal">Journal</string>
+    <string name="settings">Settings</string>
+    <string name="help">Help</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="reports">Reports</string>
+</resources>

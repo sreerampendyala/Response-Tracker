@@ -47,24 +47,6 @@ public class SingleButtonActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
-                    case (R.id.duelButton): {
-                        dl.closeDrawers();
-                        startActivity(new Intent(SingleButtonActivity.this, DuelButtonActivity.class));
-                        break;
-                    }
-
-                    case (R.id.singleButton) : {
-                        dl.closeDrawers();
-                        startActivity(new Intent(SingleButtonActivity.this, SingleButtonActivity.class));
-                        break;
-                    }
-
-                    case (R.id.report) : {
-                        dl.closeDrawers();
-                        startActivity(new Intent(SingleButtonActivity.this, ReportActivity.class));
-                        break;
-                    }
-
                     case (R.id.note) :{
                         dl.closeDrawers();
                         startActivity(new Intent(SingleButtonActivity.this, NoteActivity.class));

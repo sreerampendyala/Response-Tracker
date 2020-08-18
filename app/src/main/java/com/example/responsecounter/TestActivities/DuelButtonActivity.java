@@ -19,7 +19,6 @@ import com.example.responsecounter.HomeActivites.SubjectHome;
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
 import com.example.responsecounter.R;
-import com.example.responsecounter.MiscellaneousActivites.ReportActivity;
 import com.example.util.DatabaseConnector;
 import com.example.util.Interfaces.DataInterfaces.DataSaveInterface;
 import com.example.util.Models.TapModel;
@@ -148,24 +147,6 @@ public class DuelButtonActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
-                    case (R.id.duelButton): {
-                        dl.closeDrawers();
-                        startActivity(new Intent(DuelButtonActivity.this, DuelButtonActivity.class));
-                        break;
-                    }
-
-                    case (R.id.singleButton) : {
-                        dl.closeDrawers();
-                        startActivity(new Intent(DuelButtonActivity.this, SingleButtonActivity.class));
-                        break;
-                    }
-
-                    case (R.id.report) : {
-                        dl.closeDrawers();
-                        startActivity(new Intent(DuelButtonActivity.this, ReportActivity.class));
-                        break;
-                    }
-
                     case (R.id.note) :{
                         dl.closeDrawers();
                         startActivity(new Intent(DuelButtonActivity.this, NoteActivity.class));

@@ -52,24 +52,6 @@ public class HelpActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch (id) {
-                    case (R.id.duelButton): {
-                        dl.closeDrawers();
-                        startActivity(new Intent(HelpActivity.this, DuelButtonActivity.class));
-                        break;
-                    }
-
-                    case (R.id.singleButton) : {
-                        dl.closeDrawers();
-                        startActivity(new Intent(HelpActivity.this, SingleButtonActivity.class));
-                        break;
-                    }
-
-                    case (R.id.report) : {
-                        dl.closeDrawers();
-                        startActivity(new Intent(HelpActivity.this, ReportActivity.class));
-                        break;
-                    }
-
                     case (R.id.note) :{
                         dl.closeDrawers();
                         startActivity(new Intent(HelpActivity.this, NoteActivity.class));
