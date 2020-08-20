@@ -690,6 +690,7 @@ public class DatabaseConnector {
    * @param listner - an interface for the callbacks, DataReceiveInterface
    */
   public void getPhysicianControl(final DataReceiveInterface listner) {
+    //if(EntityClass.getPhysicianInstance().getPhysicianEmail().isEmpty()) return;
     if(EntityClass.getInstance().getPhysicianEmail().isEmpty())  return;
     dataCollectionRefernce.document(EntityClass.getInstance().getPhysicianEmail())
         .collection(EntityClass.getInstance().getSubjectEmail())

@@ -1,38 +1,61 @@
 package com.example.util.Models;
 
-public class SubjectDetailModel extends SubjectDataModel {
-    private boolean accessReports;
-    private boolean accessDuelTapTest;
-    private boolean accessSingleTapTest;
 
-    public boolean isAccessReports() {
-        return accessReports;
+public class SubjectDetailModel {
+    private String subjectEmail;
+    private String subjectName;
+    private String subjectAge;
+    private String imageUri;
+    private String UserIdInDB;
+
+    private static SubjectDetailModel instance;
+
+    public static SubjectDetailModel getInstance() {
+        if(instance == null) instance = new SubjectDetailModel();
+        return instance;
     }
 
-    public void setAccessReports(boolean accessReports) {
-        this.accessReports = accessReports;
+    public SubjectDetailModel() {
+
     }
 
-    public boolean isAccessDuelTapTest() {
-        return accessDuelTapTest;
+    public String getSubjectEmail() {
+        return subjectEmail;
     }
 
-    public void setAccessDuelTapTest(boolean accessDuelTapTest) {
-        this.accessDuelTapTest = accessDuelTapTest;
+    public void setSubjectEmail(String subjectEmail) {
+        this.subjectEmail = subjectEmail;
     }
 
-    public boolean isAccessSingleTapTest() {
-        return accessSingleTapTest;
+    public String getSubjectName() {
+        return subjectName;
     }
 
-    public void setAccessSingleTapTest(boolean accessSingleTapTest) {
-        this.accessSingleTapTest = accessSingleTapTest;
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
-    public SubjectDetailModel(String email, String name, String age, boolean accessReports, boolean accessDuelTapTest, boolean accessSingleTapTest) {
-        super(email, name, age);
-        this.accessReports = accessReports;
-        this.accessDuelTapTest = accessDuelTapTest;
-        this.accessSingleTapTest = accessSingleTapTest;
+    public String getSubjectAge() {
+        return subjectAge;
+    }
+
+    public void setSubjectAge(String subjectAge) {
+        this.subjectAge = subjectAge;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public String getUserIdInDB() {
+        return UserIdInDB;
+    }
+
+    public void setUserIdInDB(String userIdInDB) {
+        UserIdInDB = userIdInDB;
     }
 }

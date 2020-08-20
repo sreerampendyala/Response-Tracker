@@ -1,6 +1,8 @@
 package com.example.util;
 
 import com.example.util.Models.PhysicianChoiceModel;
+import com.example.util.Models.PhysicianDetailModel;
+import com.example.util.Models.SubjectDetailModel;
 
 
 import java.util.List;
@@ -18,6 +20,9 @@ public class EntityClass {
     private boolean isSubject;
 
     private static EntityClass instance;
+    private static SubjectDetailModel subjectInstance;
+    private static PhysicianDetailModel physicianInstance;
+
 
     public static EntityClass getInstance() {
 
@@ -27,7 +32,16 @@ public class EntityClass {
     }
 
     EntityClass() {
+        if(subjectInstance == null)  subjectInstance = SubjectDetailModel.getInstance();
+        if(physicianInstance == null) physicianInstance = PhysicianDetailModel.getInstance();
+    }
 
+    public static SubjectDetailModel getSubjectInstance() {
+        return subjectInstance;
+    }
+
+    public static PhysicianDetailModel getPhysicianInstance() {
+        return physicianInstance;
     }
 
     public List<PhysicianChoiceModel> getPhysicianChoiceList() {
