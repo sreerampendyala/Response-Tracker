@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.responsecounter.SignInActivities.SignInActivity;
 import com.example.util.EntityClass;
+import com.example.util.Models.PhysicianDetailModel;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        EntityClass.getInstance().setPhysicianEmail("");
+        PhysicianDetailModel.getInstance().setPhysicianEmail("");
     }
 
     @Override

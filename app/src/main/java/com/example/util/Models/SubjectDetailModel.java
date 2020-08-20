@@ -43,19 +43,19 @@ public class SubjectDetailModel {
         this.subjectAge = subjectAge;
     }
 
-    public String getImageUri() {
+    public String getSubjectImageUri() {
         return imageUri;
     }
 
-    public void setImageUri(String imageUri) {
+    public void setSubjectImageUri(String imageUri) {
         this.imageUri = imageUri;
     }
 
-    public String getUserIdInDB() {
+    public String getUserIdInDb() {
         return UserIdInDB;
     }
 
-    public void setUserIdInDB(String userIdInDB) {
+    public void setUserIdInDb(String userIdInDB) {
         UserIdInDB = userIdInDB;
     }
 }

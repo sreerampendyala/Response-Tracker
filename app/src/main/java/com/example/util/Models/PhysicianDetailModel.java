@@ -32,11 +32,11 @@ public class PhysicianDetailModel {
     this.physicianEmail = physicianEmail;
   }
 
-  public String getUserIdInDB() {
+  public String getUserIdInDb() {
     return UserIdInDB;
   }
 
-  public void setUserIdInDB(String userIdInDB) {
+  public void setUserIdInDb(String userIdInDB) {
     UserIdInDB = userIdInDB;
   }
 }

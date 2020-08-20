@@ -1,28 +1,16 @@
 package com.example.util;
 
 import com.example.util.Models.PhysicianChoiceModel;
-import com.example.util.Models.PhysicianDetailModel;
-import com.example.util.Models.SubjectDetailModel;
 
 
 import java.util.List;
 
 
 public class EntityClass {
-    private String userName;
-    private String userIdInDb;
-    private String subjectName;
-    private String subjectEmail;
-    private String physicianEmail;
-    private String subjectAge;
-    private String subjectImageUri;
     private List<PhysicianChoiceModel> physicianChoiceList;
     private boolean isSubject;
 
     private static EntityClass instance;
-    private static SubjectDetailModel subjectInstance;
-    private static PhysicianDetailModel physicianInstance;
-
 
     public static EntityClass getInstance() {
 
@@ -32,17 +20,9 @@ public class EntityClass {
     }
 
     EntityClass() {
-        if(subjectInstance == null)  subjectInstance = SubjectDetailModel.getInstance();
-        if(physicianInstance == null) physicianInstance = PhysicianDetailModel.getInstance();
+
     }
 
-    public static SubjectDetailModel getSubjectInstance() {
-        return subjectInstance;
-    }
-
-    public static PhysicianDetailModel getPhysicianInstance() {
-        return physicianInstance;
-    }
 
     public List<PhysicianChoiceModel> getPhysicianChoiceList() {
         return physicianChoiceList;
@@ -75,68 +55,12 @@ public class EntityClass {
         return returnLbl;
     }
 
-    public String getPhysicianEmail() {
-        return physicianEmail;
-    }
-
-    public void setPhysicianEmail(String physicianEmail) {
-        this.physicianEmail = physicianEmail;
-    }
-
     public boolean isSubject() {
         return isSubject;
     }
 
     public void setSubject(boolean subject) {
         isSubject = subject;
-    }
-
-    public String getSubjectName() {
-        return subjectName;
-    }
-
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
-    public String getSubjectEmail() {
-        return subjectEmail;
-    }
-
-    public void setSubjectEmail(String subjectEmail) {
-        this.subjectEmail = subjectEmail;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserIdInDb() {
-        return userIdInDb;
-    }
-
-    public void setUserIdInDb(String userIdInDb) {
-        this.userIdInDb = userIdInDb;
-    }
-
-    public String getSubjectAge() {
-        return subjectAge;
-    }
-
-    public void setSubjectAge(String subjectAge) {
-        this.subjectAge = subjectAge;
-    }
-
-    public String getSubjectImageUri() {
-        return subjectImageUri;
-    }
-
-    public void setSubjectImageUri(String subjectImageUri) {
-        this.subjectImageUri = subjectImageUri;
     }
 
 }

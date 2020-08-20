@@ -27,6 +27,8 @@ import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
 import com.example.util.Interfaces.DataInterfaces.SubjectList;
 import com.example.util.Interfaces.ValidationInterfaces.SubjectInterface;
+import com.example.util.Models.PhysicianDetailModel;
+import com.example.util.Models.SubjectDetailModel;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -57,10 +59,9 @@ public class PhysicianHome extends AppCompatActivity {
         userName = findViewById(R.id.username_tv);
         pgr = findViewById(R.id.physicianHome_Progress);
 
-        EntityClass obj = EntityClass.getInstance();
-        userName.setText(obj.getUserName());
-        obj.setSubjectName("");
-        obj.setSubjectEmail("");
+        userName.setText(PhysicianDetailModel.getInstance().getPhysicianName());
+        SubjectDetailModel.getInstance().setSubjectName("");
+        SubjectDetailModel.getInstance().setSubjectEmail("");
 
         autoCompleteTextView.getText().clear();
 

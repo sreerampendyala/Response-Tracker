@@ -18,6 +18,7 @@ import com.example.util.EntityClass;
 import com.example.util.Interfaces.DataInterfaces.DataReceiveInterface;
 import com.example.util.Interfaces.DataInterfaces.DataSaveInterface;
 import com.example.util.Models.PhysicianChoiceModel;
+import com.example.util.Models.SubjectDetailModel;
 import com.example.util.PhysicianChoiceAdapter;
 import com.example.util.SetupOptions;
 import com.google.android.material.navigation.NavigationView;
@@ -58,9 +59,9 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
 
     setNavigation();
 
-    String data = "Name:\t\t" + EntityClass.getInstance().getSubjectName() + "\n" +
-        "Email:\t\t" + EntityClass.getInstance().getSubjectEmail() + "\n" +
-        "Age:\t\t" + EntityClass.getInstance().getSubjectAge() + "\n";
+    String data = "Name:\t\t" + SubjectDetailModel.getInstance().getSubjectName() + "\n" +
+        "Email:\t\t" + SubjectDetailModel.getInstance().getSubjectEmail() + "\n" +
+        "Age:\t\t" + SubjectDetailModel.getInstance().getSubjectAge() + "\n";
     subjectDetails.setText(data);
 
     submitBtn.setOnClickListener(new View.OnClickListener() {

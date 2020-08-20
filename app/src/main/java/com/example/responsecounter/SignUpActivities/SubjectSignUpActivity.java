@@ -17,6 +17,8 @@ import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
 import com.example.util.Interfaces.ValidationInterfaces.SignUpInterface;
+import com.example.util.Models.PhysicianDetailModel;
+import com.example.util.Models.SubjectDetailModel;
 
 public class SubjectSignUpActivity extends AppCompatActivity {
 
@@ -53,8 +55,8 @@ public class SubjectSignUpActivity extends AppCompatActivity {
         } else if (!TextUtils.isEmpty(subjectAge.getText().toString())) {
           Toast.makeText(SubjectSignUpActivity.this, "Please fill in Age", Toast.LENGTH_LONG).show();
         } else {
-          EntityClass.getInstance().setPhysicianEmail(physicianEmail.getText().toString());
-          EntityClass.getInstance().setSubjectAge(subjectAge.getText().toString());
+          PhysicianDetailModel.getInstance().setPhysicianEmail(physicianEmail.getText().toString());
+          SubjectDetailModel.getInstance().setSubjectAge(subjectAge.getText().toString());
           DatabaseConnector dbObj = new DatabaseConnector();
           dbObj.createUserAccount(subjectEmail.getText().toString(), subjectPwd.getText().toString(), subjectName.getText().toString(), new SignUpInterface() {
             @Override
