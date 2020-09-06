@@ -3,8 +3,15 @@ package com.example.responsecounter.HomeActivites;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Application;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +31,7 @@ import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
 import com.example.responsecounter.R;
 import com.example.responsecounter.TestActivities.DuelButtonActivity;
 import com.example.responsecounter.TestActivities.SingleButtonActivity;
+import com.example.util.CreateChannel;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
 import com.example.util.Interfaces.DataInterfaces.DataReceiveInterface;
@@ -44,7 +52,7 @@ public class SubjectHome extends AppCompatActivity {
   private TextView subjectInfo;
   private int backButtonCount = 0;
   private ImageView image;
-  private Button testAvailable;
+  private Button singleTestBtn, doubleTestBtn;
   private Button reportsAvailable;
 
   private final String TAG = "SubjectHome";
@@ -57,55 +65,75 @@ public class SubjectHome extends AppCompatActivity {
 
     image = findViewById(R.id.imgView_pic_patientHome);
     subjectInfo = findViewById(R.id.patientDetailsTextView);
-    testAvailable = findViewById(R.id.patientHome_TestAvailable);
+    singleTestBtn =findViewById(R.id.subject_singletest_button);
+    doubleTestBtn = findViewById(R.id.subject_duelTest_button);
     reportsAvailable = findViewById(R.id.patientHome_ReportAvailable);
     reportsAvailable.setEnabled(false);
-    testAvailable.setEnabled(false);
+    singleTestBtn.setEnabled(false);
+    doubleTestBtn.setEnabled(false);
     String data = "Name:\t\t" + SubjectDetailModel.getInstance().getSubjectName() + "\n" +
         "Email:\t\t" + SubjectDetailModel.getInstance().getSubjectEmail() + "\n" +
         "Age:\t\t" + SubjectDetailModel.getInstance().getSubjectAge() + "\n";
     subjectInfo.setText(data);
-
-
+    buttonAction();
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    getPictureOnStart();
+  private void buttonAction() {
     new DatabaseConnector().getPhysicianControl(new DataReceiveInterface() {
       @Override
-      public void status(boolean isSuucess) {
-        if (isSuucess) {
+      public void status(boolean isSuccess) {
+        if (isSuccess) {
           if(!EntityClass.getInstance().getPhysicianChoiceList().isEmpty()) {
             for(final PhysicianChoiceModel setting: EntityClass.getInstance().getPhysicianChoiceList()) {
               if(setting.isValue()) {
-                if(setting.getLable() == EntityClass.getInstance().getLbl(SetupOptions.ReportLbl)) {
+
+                if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.ReportLbl))) {
+                  addNotification(setting.getLable(), SetupOptions.ReportLbl.ordinal());
                   reportsAvailable.setEnabled(true);
                   reportsAvailable.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                      reportsAvailable.setEnabled(false);
+                      try{
+                        removeNotification(SetupOptions.ReportLbl.ordinal());
+                      } catch (Exception e) {
+                        Log.d(TAG, "onClick: " + e.getMessage());
+                      }
                       EntityClass.getInstance().changeValueAtPhysicianChoiseList(EntityClass.getInstance().getPhysicianChoiceList().indexOf(setting), false);
                       updatePhysicianChoice();
                       startActivity(new Intent(SubjectHome.this, ReportActivity.class));
                     }
                   });
                 }
-                if(setting.getLable() == EntityClass.getInstance().getLbl(SetupOptions.SingleButtonLbl)) {
-                  testAvailable.setEnabled(true);
-                  testAvailable.setOnClickListener(new View.OnClickListener() {
+                if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.SingleButtonLbl))) {
+                  addNotification(setting.getLable(), SetupOptions.SingleButtonLbl.ordinal());
+                  singleTestBtn.setEnabled(true);
+                  singleTestBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                      singleTestBtn.setEnabled(false);
+                      try{
+                        removeNotification(SetupOptions.SingleButtonLbl.ordinal());
+                      } catch (Exception e) {
+                        Log.d(TAG, "onClick: " + e.getMessage());
+                      }
                       EntityClass.getInstance().changeValueAtPhysicianChoiseList(EntityClass.getInstance().getPhysicianChoiceList().indexOf(setting), false);
                       updatePhysicianChoice();
                       startActivity(new Intent(SubjectHome.this, SingleButtonActivity.class));
                     }
                   });
-                } else if(setting.getLable() == EntityClass.getInstance().getLbl(SetupOptions.DoubleButtonLbl)) {
-                  testAvailable.setEnabled(true);
-                  testAvailable.setOnClickListener(new View.OnClickListener() {
+                } else if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.DoubleButtonLbl))) {
+                  addNotification(setting.getLable(), SetupOptions.DoubleButtonLbl.ordinal());
+                  doubleTestBtn.setEnabled(true);
+                  doubleTestBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                      doubleTestBtn.setEnabled(false);
+                      try{
+                        removeNotification(SetupOptions.DoubleButtonLbl.ordinal());
+                      } catch (Exception e) {
+                        Log.d(TAG, "onClick: " + e.getMessage());
+                      }
                       EntityClass.getInstance().changeValueAtPhysicianChoiseList(EntityClass.getInstance().getPhysicianChoiceList().indexOf(setting), false);
                       updatePhysicianChoice();
                       startActivity(new Intent(SubjectHome.this, DuelButtonActivity.class));
@@ -125,11 +153,46 @@ public class SubjectHome extends AppCompatActivity {
     });
   }
 
+  private void addNotification(String activityName, int code) {
+
+    Intent finalIntent = new Intent(this, SubjectHome.class);
+    finalIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, finalIntent, 0);
+
+
+    NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(this, CreateChannel.CHANNEL_1_ID)
+        .setSmallIcon(R.drawable.ic_stat_name)
+        .setContentTitle("Activity Available")
+        .setContentText(activityName)
+        .setContentIntent(resultPendingIntent)
+        .setAutoCancel(true);
+
+    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+    notificationManager.notify(code, mbuilder.build());
+  }
+
+  private void removeNotification(int code) {
+    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    notificationManager.cancel(code);
+
+  }
+  @Override
+  protected void onStart() {
+    super.onStart();
+    getPictureOnStart();
+    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    notificationManager.cancelAll();
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    getPictureOnStart();
+  }
+
   @Override
   protected void onRestart() {
     super.onRestart();
-    reportsAvailable.setEnabled(false);
-    testAvailable.setEnabled(false);
   }
 
   private void getPictureOnStart() {
@@ -140,7 +203,7 @@ public class SubjectHome extends AppCompatActivity {
         @Override
         public void statusAndUri(boolean isSuccess, Uri uri) {
           if (isSuccess) {
-            Picasso.get().load(uri).placeholder(R.drawable.background)
+            Picasso.get().load(uri).placeholder(R.drawable.user_picture_24dp)
                 .fit()
                 .into(image);
           }
@@ -225,12 +288,13 @@ public class SubjectHome extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
-    if (backButtonCount >= 1) {
-      dl.closeDrawers();
-      new DatabaseConnector().firebaseSignOut();
-      startActivity(new Intent(SubjectHome.this, MainActivity.class));
+    if(backButtonCount >= 1)  {
+      Intent intent = new Intent(Intent.ACTION_MAIN);
+      intent.addCategory(Intent.CATEGORY_HOME);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      startActivity(intent);
     } else {
-      Toast.makeText(this, "Press the back button once again to Sign Out.", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, "Press the back button once again to exit the app", Toast.LENGTH_SHORT).show();
       backButtonCount++;
     }
   }

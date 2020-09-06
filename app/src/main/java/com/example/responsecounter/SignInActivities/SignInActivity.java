@@ -2,6 +2,7 @@ package com.example.responsecounter.SignInActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.example.responsecounter.HomeActivites.PhysicianHome;
 import com.example.responsecounter.HomeActivites.SubjectHome;
 import com.example.responsecounter.MainActivity;
+import com.example.responsecounter.MiscellaneousActivites.PasswordReset;
 import com.example.responsecounter.R;
 import com.example.responsecounter.SignUpActivities.PhysicianSignUpActivity;
 import com.example.responsecounter.SignUpActivities.SubjectSignUpActivity;
@@ -26,7 +28,7 @@ import com.example.util.Interfaces.ValidationInterfaces.CredValidationInterface;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private Button signInbtn;
+    private Button signInbtn, forgotpassword;
     private TextView signUp;
     private AutoCompleteTextView email;
     private TextView pwd;
@@ -45,6 +47,14 @@ public class SignInActivity extends AppCompatActivity {
         email = findViewById(R.id.username_tb);
         pwd = findViewById(R.id.pwd_tb);
         pgr = findViewById(R.id.signIn_Progress);
+        forgotpassword = findViewById(R.id.forgot_password_button);
+
+        forgotpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this, PasswordReset.class));
+            }
+        });
 
         signInbtn.setOnClickListener(new View.OnClickListener() {
             @Override

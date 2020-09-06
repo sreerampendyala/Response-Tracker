@@ -4,15 +4,16 @@
     <string name="Close">Response Counter</string>
     <string name="email_name">Email</string>
     <string name="password_text">Password</string>
-    <string name="patient_MainActivity">Patient</string>
-    <string name="physician_MainActivity">Physician</string>
+    <string name="patient_MainActivity">Patient Access</string>
+    <string name="physician_MainActivity">Physician Access</string>
     <string name="please_choose_physician_login_or_patient_login">Please Choose Physician Login or Patient Login</string>
-    <string name="enter_name">Enter Name</string>
-    <string name="enter_age">Enter Age</string>
+    <string name="enter_name">Name</string>
+    <string name="enter_age">Age</string>
     <string name="create_password">Create Password</string>
     <string name="re_enter_the_password">Re enter the Password</string>
-    <string name="enter_email">Enter Email</string>
-    <string name="enter_physician_email">Enter Physician Email</string>
+    <string name="enter_email">Email</string>
+    <string name="enter_physician_email">Your Physician Email</string>
     <string name="create_account">Create Account</string>
-    <string name="spinner_title">Please choose a Patient</string>
+    <string name="spinner_title">Type Patient Name Here</string>
+    <string name="patient_home_instructions">The activities are available to access only once when every time your Physician gives access.</string>
 </resources>

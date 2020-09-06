@@ -3,7 +3,10 @@ package com.example.util;
 import com.example.util.Models.PhysicianChoiceModel;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class EntityClass {
@@ -19,10 +22,13 @@ public class EntityClass {
         return  instance;
     }
 
-    EntityClass() {
-
+    public boolean isSubject() {
+        return isSubject;
     }
 
+    public void setSubject(boolean subject) {
+        isSubject = subject;
+    }
 
     public List<PhysicianChoiceModel> getPhysicianChoiceList() {
         return physicianChoiceList;
@@ -55,12 +61,14 @@ public class EntityClass {
         return returnLbl;
     }
 
-    public boolean isSubject() {
-        return isSubject;
-    }
-
-    public void setSubject(boolean subject) {
-        isSubject = subject;
+    public Map<String, String> generateMap(ArrayList<String> Keys, ArrayList<String> Values) {
+        Map<String, String> map = new HashMap<>();
+        if(Keys.size() == Values.size()) {
+            for(int index = 0; index<Keys.size(); index++) {
+                map.put(Keys.get(index), Values.get(index));
+            }
+        }
+        return map;
     }
 
 }

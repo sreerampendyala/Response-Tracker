@@ -4,102 +4,124 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="15dp"
+    android:background="@color/mainBackground"
     tools:context=".SignUpActivities.SubjectSignUpActivity">
 
     <EditText
         android:id="@+id/enterName_Subject_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="370dp"
+        android:layout_height="62dp"
+        android:autofillHints=""
+        android:background="@drawable/textview_border"
         android:ems="10"
         android:hint="@string/enter_name"
         android:inputType="textPersonName"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.064"
-        android:autofillHints="" />
-
-    <EditText
-        android:id="@+id/enterAge_Subject_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/enter_age"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.174"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.035" />
 
     <EditText
         android:id="@+id/enterPwd_Subject_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="370dp"
+        android:layout_height="62dp"
+        android:autofillHints=""
+        android:background="@drawable/textview_border"
+        android:elevation="4dp"
         android:ems="10"
         android:hint="@string/create_password"
         android:inputType="textPassword"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.418"
-        android:autofillHints="" />
-
-    <EditText
-        android:id="@+id/reEnterPwd_Subject_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/re_enter_the_password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.531"
-        android:autofillHints="" />
-
-    <EditText
-        android:id="@+id/enterEmail_subject_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/enter_email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.299"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/enterEmail_subject_tv"
+        app:layout_constraintVertical_bias="0.079" />
 
     <EditText
         android:id="@+id/physicianEmail_Subject_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="370dp"
+        android:layout_height="62dp"
+        android:autofillHints=""
+        android:background="@drawable/textview_border"
+        android:elevation="4dp"
         android:ems="10"
         android:hint="@string/enter_physician_email"
         android:inputType="textEmailAddress"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.652"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/reEnterPwd_Subject_tv"
+        app:layout_constraintVertical_bias="0.179" />
+
+    <EditText
+        android:id="@+id/reEnterPwd_Subject_tv"
+        android:layout_width="370dp"
+        android:layout_height="62dp"
+        android:autofillHints=""
+        android:background="@drawable/textview_border"
+        android:elevation="4dp"
+        android:ems="10"
+        android:hint="@string/re_enter_the_password"
+        android:inputType="textPassword"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enterPwd_Subject_tv"
+        app:layout_constraintVertical_bias="0.129" />
+
+    <EditText
+        android:id="@+id/enterEmail_subject_tv"
+        android:layout_width="370dp"
+        android:layout_height="62dp"
+        android:autofillHints=""
+        android:background="@drawable/textview_border"
+        android:elevation="4dp"
+        android:ems="10"
+        android:hint="@string/enter_email"
+        android:inputType="textEmailAddress"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enterAge_Subject_tv"
+        app:layout_constraintVertical_bias="0.079" />
+
+    <EditText
+        android:id="@+id/enterAge_Subject_tv"
+        android:layout_width="370dp"
+        android:layout_height="62dp"
+        android:background="@drawable/textview_border"
+        android:elevation="4dp"
+        android:ems="10"
+        android:hint="@string/enter_age"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enterName_Subject_tv"
+        app:layout_constraintVertical_bias="0.059" />
 
     <Button
         android:id="@+id/createAccount_Subject_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@color/mainTextColor"
+        android:elevation="4dp"
+        android:padding="5dp"
         android:text="@string/create_account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.799" />
+        app:layout_constraintTop_toBottomOf="@+id/physicianEmail_Subject_tv"
+        app:layout_constraintVertical_bias="0.44" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

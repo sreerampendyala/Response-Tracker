@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/cardview_light_background"
+        android:background="@color/mainBackground"
         tools:context=".HomeActivites.PhysicianHome">
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/physicianHome_Progress"
@@ -36,6 +36,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:background="@color/mainTextColor"
                 android:layout_height="match_parent">
 
                 <AutoCompleteTextView
@@ -43,11 +44,10 @@
                     style="@style/TextAppearance.AppCompat"
                     android:layout_width="337dp"
                     android:layout_height="60dp"
-                    android:background="@drawable/textview_border"
+                    android:background="@color/mainTextColor"
                     android:fontFamily="@font/times_new_roman_400"
                     android:hint="@string/spinner_title"
                     android:paddingLeft="14dp"
-                    android:shadowColor="#303F9F"
                     android:singleLine="true"
                     android:spinnerMode="dropdown"
                     android:textSize="19sp"
@@ -63,26 +63,12 @@
 
 
         <TextView
-            android:id="@+id/welcome_tv"
-            android:layout_width="319dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/times_new_roman_400"
-            android:text="Please Enter the Patient Name"
-            android:textColor="#303F9F"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username_tv"
-            app:layout_constraintVertical_bias="0.027" />
-
-        <TextView
             android:id="@+id/username_tv"
             android:layout_width="308dp"
             android:layout_height="71dp"
             android:fontFamily="@font/times_new_roman_400"
             android:text="TextView"
-            android:textColor="#303F9F"
+            android:textColor="@color/mainTextColor"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,8 +85,8 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/alegreya_sans_sc_extrabold"
             android:text="Submit"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="20dp"
+            android:textColor="#F7FFEB6B"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -116,6 +102,7 @@
         android:layout_gravity="start"
         android:visibility="visible"
         app:headerLayout="@layout/navigation_header"
+        android:background="@color/mainBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

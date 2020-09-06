@@ -71,7 +71,7 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
         new DatabaseConnector().updatePhysicianControl(new DataSaveInterface() {
           @Override
           public void successStatus(boolean isSuccess) {
-            Toast.makeText(PhysiciansSubjectHome.this, "Updated", Toast.LENGTH_LONG).show();
+            if(isSuccess) Toast.makeText(PhysiciansSubjectHome.this, "Updated", Toast.LENGTH_LONG).show();
             pgr.setVisibility(View.INVISIBLE);
           }
 

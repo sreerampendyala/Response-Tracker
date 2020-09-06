@@ -31,7 +31,7 @@
             android:layout_height="104dp"
             android:adjustViewBounds="false"
             android:scaleType="centerCrop"
-            android:src="@drawable/background"
+            android:src="@drawable/user_picture_24dp"
             app:civ_border_color="#FF000000"
             app:civ_border_width="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -117,59 +117,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.388"
                 app:layout_constraintStart_toEndOf="@+id/updateName_settingsLbl"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.242" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="407dp"
-            android:layout_height="134dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.58">
-
-            <EditText
-                android:id="@+id/updatePhysicianEmail_settingTb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textEmailAddress"
-                android:hint="Physician Email"
-                android:enabled="false"
-                android:fontFamily="@font/times_new_roman_400"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.82"/>
-
-            <TextView
-                android:id="@+id/updateEmail_settingsLbl"
-                android:layout_width="288dp"
-                android:layout_height="45dp"
-                android:fontFamily="@font/times_new_roman_400"
-                android:text="Do you want to update your Physician Email?"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.105"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.243" />
-
-            <Switch
-                android:id="@+id/updateEmail_switchSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.388"
-                app:layout_constraintStart_toEndOf="@+id/updateEmail_settingsLbl"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.242" />
         </androidx.constraintlayout.widget.ConstraintLayout>

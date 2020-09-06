@@ -1,6 +1,7 @@
 package com.example.util;
 
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import com.example.util.Interfaces.DataInterfaces.SubjectList;
 import com.example.util.Interfaces.ValidationInterfaces.CheckLoggedInInterface;
 import com.example.util.Interfaces.ValidationInterfaces.CredValidationInterface;
 import com.example.util.Interfaces.DataInterfaces.ImageInterface;
+import com.example.util.Interfaces.ValidationInterfaces.PasswordResetInterface;
 import com.example.util.Interfaces.ValidationInterfaces.SignUpInterface;
 import com.example.util.Interfaces.ValidationInterfaces.SubjectInterface;
 import com.example.util.Models.PhysicianChoiceModel;
@@ -20,10 +22,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,7 +60,8 @@ public class DatabaseConnector {
   private CollectionReference mapCollectionRefernce = db.collection("Map");
 
   private final static String TAG = "Database Connector";
-  private final static  String PhysicianChoiceDocName = "PhysicianSetup";
+  private final static String PhysicianChoiceDocName = "PhysicianSetup";
+
   /**
    * Constructor, Does not take any parameters
    */
@@ -118,7 +125,8 @@ public class DatabaseConnector {
   public void validateLogin(final String email, String password, final CredValidationInterface listner) {
 
     firebaseAuth = FirebaseAuth.getInstance();
-    if (!EntityClass.getInstance().isSubject()) PhysicianDetailModel.getInstance().setPhysicianEmail(email);
+    if (!EntityClass.getInstance().isSubject())
+      PhysicianDetailModel.getInstance().setPhysicianEmail(email);
     else SubjectDetailModel.getInstance().setSubjectEmail(email);
 
     firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -136,7 +144,7 @@ public class DatabaseConnector {
                       @Override
                       public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-                          if(EntityClass.getInstance().isSubject()) {
+                          if (EntityClass.getInstance().isSubject()) {
                             SubjectDetailModel.getInstance().setSubjectName(documentSnapshot.getString("UserName"));
                             SubjectDetailModel.getInstance().setUserIdInDb(currentUserId);
                           } else {
@@ -227,7 +235,7 @@ public class DatabaseConnector {
    * @param loginUserName userID
    * @param listner       Interface for callbacks, SignupInterface
    */
-  public void createUserAccount(final String loginEmail, final String loginPassword, final String loginUserName,final SignUpInterface listner) {
+  public void createUserAccount(final String loginEmail, final String loginPassword, final String loginUserName, final SignUpInterface listner) {
 
     firebaseAuth = FirebaseAuth.getInstance();
     firebaseAuth.createUserWithEmailAndPassword(loginEmail, loginPassword)
@@ -241,7 +249,8 @@ public class DatabaseConnector {
               final Map<String, String> userMap = new HashMap<>();
               userMap.put("UserIdInDB", currentUserId);
               userMap.put("UserName", loginUserName);
-              if(EntityClass.getInstance().isSubject()) userMap.put("Age", SubjectDetailModel.getInstance().getSubjectAge());
+              if (EntityClass.getInstance().isSubject())
+                userMap.put("Age", SubjectDetailModel.getInstance().getSubjectAge());
               if (EntityClass.getInstance().isSubject()) {
                 if (PhysicianDetailModel.getInstance().getPhysicianEmail() != null && PhysicianDetailModel.getInstance().getPhysicianEmail() != "") {
                   dataCollectionRefernce.document(PhysicianDetailModel.getInstance().getPhysicianEmail())
@@ -407,7 +416,17 @@ public class DatabaseConnector {
                     if (!task.getResult().isEmpty()) {
                       SubjectDetailModel.getInstance().setSubjectName(name);
                       SubjectDetailModel.getInstance().setSubjectEmail(email);
-                      listner.subjectExistOrCreated(true);
+                      for(DocumentSnapshot snapshot: task.getResult().getDocuments()) {
+                        if(snapshot.getId().equals("SubjectData")) {
+                          SubjectDetailModel.getInstance().setUserIdInDb(snapshot.get("UserIdInDB").toString());
+                          break;
+                        }
+                      }
+                      if(TextUtils.isEmpty(SubjectDetailModel.getInstance().getUserIdInDb())) {
+                        Log.d(TAG, "onFailure: Unable to find UserIdInBb");
+                        listner.subjectExistOrCreated(false);
+                        listner.onFailure("Unable to find UserIdInBb");
+                      } else listner.subjectExistOrCreated(true);
                     } else {
                       Log.d(TAG, "onFailure: Unable to Find the User Record");
                       listner.subjectExistOrCreated(false);
@@ -540,55 +559,52 @@ public class DatabaseConnector {
   }
 
   /**
+   * This method is used to send the link to registered email to reset the password.
+   *
+   * @param email   The registered email of the user.
+   * @param listner The interface for the compatibility with callbacks.
+   */
+  public void forgotPassword(String email, final PasswordResetInterface listner) {
+    FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+        .addOnCompleteListener(new OnCompleteListener<Void>() {
+          @Override
+          public void onComplete(@NonNull Task<Void> task) {
+            if (task.isSuccessful()) {
+              listner.status(true, "Email sent.");
+            } else if (task.getException() != null)
+              listner.status(false, task.getException().getMessage().toString());
+          }
+        }).addOnFailureListener(new OnFailureListener() {
+      @Override
+      public void onFailure(@NonNull Exception e) {
+        listner.status(false, e.getMessage().toString());
+      }
+    });
+  }
+
+  /**
    * This method is used to update the physician settings as of which activities must be enabled for patient.
+   *
    * @param listner - an Interface of type DataSaveInterface.
    */
   public void updatePhysicianControl(final DataSaveInterface listner) {
     if (!EntityClass.getInstance().getPhysicianChoiceList().isEmpty()) {
-      dataCollectionRefernce.document(PhysicianDetailModel.getInstance().getPhysicianEmail())
-          .collection(SubjectDetailModel.getInstance().getSubjectEmail())
-          .get()
-          .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+      DatabaseReference realDb = FirebaseDatabase.getInstance().getReference("Patient Access");
+
+      Map<String, Object> settingMap = new HashMap<>();
+      for (PhysicianChoiceModel setting : EntityClass.getInstance().getPhysicianChoiceList()) {
+        settingMap.put(setting.getLable(), String.valueOf(setting.isValue()));
+      }
+      realDb.child(SubjectDetailModel.getInstance().getUserIdInDb()).updateChildren(settingMap)
+          .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-              boolean subjectDataExists = false;
-              for(QueryDocumentSnapshot snapshot: queryDocumentSnapshots) {
-                if(snapshot.exists()) {
-                  if(!snapshot.getReference().getId().equals("SubjectData")) continue;
-                  subjectDataExists = true;
-                  Map<String, String> settingMap = new HashMap<>();
-                  for(PhysicianChoiceModel setting: EntityClass.getInstance().getPhysicianChoiceList()) {
-                    settingMap.put(setting.getLable(), String.valueOf(setting.isValue()));
-                  }
-                  dataCollectionRefernce.document(PhysicianDetailModel.getInstance().getPhysicianEmail())
-                      .collection(SubjectDetailModel.getInstance().getSubjectEmail())
-                      .document(PhysicianChoiceDocName)
-                      .set(settingMap)
-                      .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                          listner.successStatus(true);
-                        }
-                      }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                      Log.d(TAG, "Database Connector| Error updating data | onFailure: " + e.getMessage());
-                      listner.successStatus(false);
-                      listner.onFailure(e.getMessage());
-                    }
-                  });
-                }
-              }
-              if(!subjectDataExists) {
-                Log.d(TAG, "Database Connector| Subject data not found.");
-                listner.successStatus(false);
-                listner.onFailure("Subject data not found.");
-              }
+            public void onSuccess(Void aVoid) {
+              listner.successStatus(true);
             }
           }).addOnFailureListener(new OnFailureListener() {
         @Override
         public void onFailure(@NonNull Exception e) {
-          Log.d(TAG, "Database Connector| Subject folder not found | onFailure: " + e.getMessage());
+          Log.d(TAG, "onFailure: " + e.getMessage());
           listner.successStatus(false);
           listner.onFailure(e.getMessage());
         }
@@ -602,34 +618,42 @@ public class DatabaseConnector {
   /**
    * This method can be used to retrieve the physician settings from the database.
    * THE PHYSICIAN EMAIL MUST BE ALREADY RETRIEVED FROM THE DATABASE OR PROVIDED FROM UI
+   *
    * @param listner - an interface for the callbacks, DataReceiveInterface
    */
   public void getPhysicianControl(final DataReceiveInterface listner) {
-    if(PhysicianDetailModel.getInstance().getPhysicianEmail().isEmpty())  return;
-    dataCollectionRefernce.document(PhysicianDetailModel.getInstance().getPhysicianEmail())
-        .collection(SubjectDetailModel.getInstance().getSubjectEmail())
-        .document(PhysicianChoiceDocName)
-        .get()
-        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-          @Override
-          public void onSuccess(DocumentSnapshot documentSnapshot) {
-            List<PhysicianChoiceModel> physicianChoiceList = new ArrayList<>();
-            PhysicianChoiceModel model;
-            for(SetupOptions option : SetupOptions.values()) {
-              model = new PhysicianChoiceModel();
-              model.setLable(EntityClass.getInstance().getLbl(option));
-              model.setValue(Boolean.valueOf( documentSnapshot.getString(EntityClass.getInstance().getLbl(option))));
-              physicianChoiceList.add(model);
-            }
-            EntityClass.getInstance().setPhysicianChoiceList(physicianChoiceList);
-            listner.status(true);
-          }
-        }).addOnFailureListener(new OnFailureListener() {
+    if (PhysicianDetailModel.getInstance().getPhysicianEmail().isEmpty()) return;
+    DatabaseReference realDb = FirebaseDatabase.getInstance().getReference("Patient Access").child(SubjectDetailModel.getInstance().getUserIdInDb());
+
+    realDb.addValueEventListener(new ValueEventListener() {
       @Override
-      public void onFailure(@NonNull Exception e) {
-        Log.d(TAG, "onFailure: | Database connector: getPhysicianControl" + e.getMessage());
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        List<PhysicianChoiceModel> physicianChoiceList = new ArrayList<>();
+        PhysicianChoiceModel model;
+        if(dataSnapshot.exists() && dataSnapshot.getChildrenCount() >0) {
+          for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+            model = new PhysicianChoiceModel();
+            model.setLable(snapshot.getKey());
+            model.setValue(Boolean.valueOf(snapshot.getValue().toString()));
+            physicianChoiceList.add(model);
+          }
+        } else {
+          for(SetupOptions option: SetupOptions.values()) {
+            model = new PhysicianChoiceModel();
+            model.setLable(EntityClass.getInstance().getLbl(option));
+            model.setValue(false);
+            physicianChoiceList.add(model);
+          }
+        }
+        EntityClass.getInstance().setPhysicianChoiceList(physicianChoiceList);
+        listner.status(true);
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError databaseError) {
+        Log.d(TAG, "onCancelled: " + databaseError.toException().toString());
         listner.status(false);
-        listner.onFailure(e.getMessage());
+        listner.onFailure(databaseError.toException().toString());
       }
     });
   }
