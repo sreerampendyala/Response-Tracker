@@ -15,5 +15,5 @@
     <string name="enter_physician_email">Your Physician Email</string>
     <string name="create_account">Create Account</string>
     <string name="spinner_title">Type Patient Name Here</string>
-    <string name="patient_home_instructions">The activities are available to access only once when every time your Physician gives access.</string>
+    <string name="patient_home_instructions">You will only be able to do these tasks when your physician and/or a researcher has provided you with access to them. Please check with your physician and/or researcher for more information about when the tasks will be made available to you.</string>
 </resources>

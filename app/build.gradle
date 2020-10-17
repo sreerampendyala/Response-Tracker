@@ -6,7 +6,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.responsecounter"
-        minSdkVersion 22
+        minSdkVersion 28
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -28,7 +28,7 @@ android {
                            'src/main/res/layouts/miscellaneous_layouts',
                            'src/main/res/layouts',
                            'src/main/res'
-            ]
+                           , 'src/main/res/layouts/instructions_layouts']
         }
     }
 }
@@ -43,6 +43,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.google.firebase:firebase-database:17.0.0'
+    implementation 'androidx.wear:wear:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
@@ -51,6 +52,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation files('libs/CircleImageView-master/gradle/wrapper/gradle-wrapper.jar')
+    compileOnly 'com.google.android.wearable:wearable:2.6.0'
 }
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 

@@ -12,8 +12,6 @@ import android.view.MenuItem;
 import com.example.responsecounter.HomeActivites.SubjectHome;
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.R;
-import com.example.responsecounter.TestActivities.DuelButtonActivity;
-import com.example.responsecounter.TestActivities.SingleButtonActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 

@@ -3,14 +3,9 @@ package com.example.responsecounter.HomeActivites;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.app.Application;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,21 +19,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.responsecounter.Instructions.DualButtonInstructions;
 import com.example.responsecounter.MiscellaneousActivites.ReportActivity;
 import com.example.responsecounter.MiscellaneousActivites.settingsActivity;
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
 import com.example.responsecounter.R;
-import com.example.responsecounter.TestActivities.DuelButtonActivity;
+import com.example.responsecounter.TestActivities.DualButtonActivity;
 import com.example.responsecounter.TestActivities.SingleButtonActivity;
 import com.example.util.CreateChannel;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
-import com.example.util.Interfaces.DataInterfaces.DataReceiveInterface;
-import com.example.util.Interfaces.DataInterfaces.DataSaveInterface;
-import com.example.util.Interfaces.DataInterfaces.ImageInterface;
+
+import com.example.util.Interfaces.MyStatListener;
 import com.example.util.Models.PhysicianChoiceModel;
 import com.example.util.Models.SubjectDetailModel;
+import com.example.util.SaveSharedPreference;
 import com.example.util.SetupOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.rpc.Help;
@@ -78,17 +74,16 @@ public class SubjectHome extends AppCompatActivity {
     buttonAction();
   }
 
-  private void buttonAction() {
-    new DatabaseConnector().getPhysicianControl(new DataReceiveInterface() {
+  public void buttonAction() {
+    new DatabaseConnector().getPhysicianControl(new MyStatListener() {
       @Override
-      public void status(boolean isSuccess) {
+      public void status(boolean isSuccess, Object obj) {
         if (isSuccess) {
           if(!EntityClass.getInstance().getPhysicianChoiceList().isEmpty()) {
             for(final PhysicianChoiceModel setting: EntityClass.getInstance().getPhysicianChoiceList()) {
               if(setting.isValue()) {
 
                 if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.ReportLbl))) {
-                  addNotification(setting.getLable(), SetupOptions.ReportLbl.ordinal());
                   reportsAvailable.setEnabled(true);
                   reportsAvailable.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -104,9 +99,7 @@ public class SubjectHome extends AppCompatActivity {
                       startActivity(new Intent(SubjectHome.this, ReportActivity.class));
                     }
                   });
-                }
-                if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.SingleButtonLbl))) {
-                  addNotification(setting.getLable(), SetupOptions.SingleButtonLbl.ordinal());
+                } else if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.SingleButtonLbl))) {
                   singleTestBtn.setEnabled(true);
                   singleTestBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -123,7 +116,6 @@ public class SubjectHome extends AppCompatActivity {
                     }
                   });
                 } else if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.DoubleButtonLbl))) {
-                  addNotification(setting.getLable(), SetupOptions.DoubleButtonLbl.ordinal());
                   doubleTestBtn.setEnabled(true);
                   doubleTestBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -134,9 +126,7 @@ public class SubjectHome extends AppCompatActivity {
                       } catch (Exception e) {
                         Log.d(TAG, "onClick: " + e.getMessage());
                       }
-                      EntityClass.getInstance().changeValueAtPhysicianChoiseList(EntityClass.getInstance().getPhysicianChoiceList().indexOf(setting), false);
-                      updatePhysicianChoice();
-                      startActivity(new Intent(SubjectHome.this, DuelButtonActivity.class));
+                      startActivity(new Intent(SubjectHome.this, DualButtonInstructions.class));
                     }
                   });
                 }
@@ -153,24 +143,6 @@ public class SubjectHome extends AppCompatActivity {
     });
   }
 
-  private void addNotification(String activityName, int code) {
-
-    Intent finalIntent = new Intent(this, SubjectHome.class);
-    finalIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, finalIntent, 0);
-
-
-    NotificationCompat.Builder mbuilder = new NotificationCompat.Builder(this, CreateChannel.CHANNEL_1_ID)
-        .setSmallIcon(R.drawable.ic_stat_name)
-        .setContentTitle("Activity Available")
-        .setContentText(activityName)
-        .setContentIntent(resultPendingIntent)
-        .setAutoCancel(true);
-
-    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-    notificationManager.notify(code, mbuilder.build());
-  }
-
   private void removeNotification(int code) {
     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     notificationManager.cancel(code);
@@ -181,13 +153,29 @@ public class SubjectHome extends AppCompatActivity {
     super.onStart();
     getPictureOnStart();
     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    stopMyService();
     notificationManager.cancelAll();
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    getPictureOnStart();
+    startMyService();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    Log.d(TAG, "onDestroy: %GGGGGGGG%");
+  }
+
+
+  private void startMyService() {
+    startService(new Intent(this, CreateChannel.class));
+  }
+
+  private void stopMyService() {
+    stopService(new Intent(this, CreateChannel.class));
   }
 
   @Override
@@ -199,9 +187,10 @@ public class SubjectHome extends AppCompatActivity {
 
     try {
       DatabaseConnector obj = new DatabaseConnector();
-      obj.getSubjectImage(new ImageInterface() {
+      obj.getSubjectImage(new MyStatListener() {
         @Override
-        public void statusAndUri(boolean isSuccess, Uri uri) {
+        public void status(boolean isSuccess, Object obj) {
+          Uri uri = Uri.parse(String.valueOf(obj));
           if (isSuccess) {
             Picasso.get().load(uri).placeholder(R.drawable.user_picture_24dp)
                 .fit()
@@ -256,6 +245,10 @@ public class SubjectHome extends AppCompatActivity {
 
           case (R.id.signOut): {
             dl.closeDrawers();
+            SaveSharedPreference.clearUserData(SubjectHome.this);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            startMyService();
+            notificationManager.cancelAll();
             new DatabaseConnector().firebaseSignOut();
             startActivity(new Intent(SubjectHome.this, MainActivity.class));
             break;
@@ -268,9 +261,9 @@ public class SubjectHome extends AppCompatActivity {
   }
 
   private void updatePhysicianChoice() {
-    new DatabaseConnector().updatePhysicianControl(new DataSaveInterface() {
+    new DatabaseConnector().updatePhysicianControl(new MyStatListener() {
       @Override
-      public void successStatus(boolean isSuccess) {
+      public void status(boolean isSuccess, Object obj) {
 
       }
 
@@ -293,6 +286,7 @@ public class SubjectHome extends AppCompatActivity {
       intent.addCategory(Intent.CATEGORY_HOME);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       startActivity(intent);
+
     } else {
       Toast.makeText(this, "Press the back button once again to exit the app", Toast.LENGTH_SHORT).show();
       backButtonCount++;

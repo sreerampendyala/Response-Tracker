@@ -9,3 +9,12 @@ git remote add upstream https://github.com/sreerampendyala/Response-Tracker.git
 git pull upstream master
 
 The code should get cloned into your git folder.
+
+#################################################
+
+The credentials for firebase account to access console and MailboxLayer are:
+username = healthcare.umflint@gmail.com;
+password = androidDevelopmentHc
+
+
+IN MailboxLayer IT IS MENTIONED IN THE HOME PAGE, "FOR PERSONAL USE" NEED TO READ THE TERMS AND CONDITIONS BEFORE DEPLOYMENT.

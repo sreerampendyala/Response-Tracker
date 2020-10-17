@@ -2,7 +2,6 @@ package com.example.responsecounter.SignInActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,14 +22,25 @@ import com.example.responsecounter.SignUpActivities.PhysicianSignUpActivity;
 import com.example.responsecounter.SignUpActivities.SubjectSignUpActivity;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
-import com.example.util.Interfaces.ValidationInterfaces.CheckLoggedInInterface;
-import com.example.util.Interfaces.ValidationInterfaces.CredValidationInterface;
+import com.example.util.Interfaces.MyStatListener;
+import com.example.util.SaveSharedPreference;
 
 public class SignInActivity extends AppCompatActivity {
-
+    /**
+     * Sigin button and forgot password button
+     */
     private Button signInbtn, forgotpassword;
+    /**
+     * signUp button
+     */
     private TextView signUp;
+    /**
+     * Email text box
+     */
     private AutoCompleteTextView email;
+    /**
+     * Password text box
+     */
     private TextView pwd;
     private ProgressBar pgr;
     private final String TAG = "SignInActivity";
@@ -82,20 +92,25 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validate the login details.
+     * @param email email of the user
+     * @param password password of the user.
+     */
     private void checkCreds(String email, String password) {
 
         try {
             Log.d("MainActivity", "checkCreds:  after constructor");
             DatabaseConnector obj = new DatabaseConnector();
-            obj.validateLogin(email, password, new CredValidationInterface() {
+            obj.validateLogin(email, password, new MyStatListener() {
                 @Override
-                public void onSuccessValidatingCredentials(boolean isSuccess) {
+                public void status(boolean isSuccess, Object obj) {
                     if(isSuccess) {
                         pgr.setVisibility(View.INVISIBLE);
                         signInbtn.setEnabled(true);
-                        if(EntityClass.getInstance().isSubject()) {
-                            startActivity(new Intent(SignInActivity.this, SubjectHome.class));
-                        } else startActivity(new Intent(SignInActivity.this, PhysicianHome.class));
+                        SaveSharedPreference.setUserNameAndType(SignInActivity.this);
+                        if(EntityClass.getInstance().isSubject()) startActivity(new Intent(SignInActivity.this, SubjectHome.class));
+                        else startActivity(new Intent(SignInActivity.this, PhysicianHome.class));
                     }
                 }
 
@@ -119,10 +134,15 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new DatabaseConnector().checkAlreadyLogin(new CheckLoggedInInterface() {
+        new DatabaseConnector().checkAlreadyLogin(new MyStatListener() {
             @Override
-            public void isLoggedIn(boolean status) {
+            public void status(boolean status, Object obj) {
                 if(status) startActivity(new Intent(SignInActivity.this, PhysicianHome.class));
+            }
+
+            @Override
+            public void onFailure(String errMessage) {
+
             }
         });
     }

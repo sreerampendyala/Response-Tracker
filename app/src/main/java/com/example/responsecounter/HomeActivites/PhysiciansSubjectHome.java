@@ -15,11 +15,11 @@ import com.example.responsecounter.MiscellaneousActivites.ReportActivity;
 import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
-import com.example.util.Interfaces.DataInterfaces.DataReceiveInterface;
-import com.example.util.Interfaces.DataInterfaces.DataSaveInterface;
+import com.example.util.Interfaces.MyStatListener;
 import com.example.util.Models.PhysicianChoiceModel;
 import com.example.util.Models.SubjectDetailModel;
 import com.example.util.PhysicianChoiceAdapter;
+import com.example.util.SaveSharedPreference;
 import com.example.util.SetupOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.rpc.Help;
@@ -68,9 +68,9 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         pgr.setVisibility(View.VISIBLE);
-        new DatabaseConnector().updatePhysicianControl(new DataSaveInterface() {
+        new DatabaseConnector().updatePhysicianControl(new MyStatListener() {
           @Override
-          public void successStatus(boolean isSuccess) {
+          public void status(boolean isSuccess, Object obj) {
             if(isSuccess) Toast.makeText(PhysiciansSubjectHome.this, "Updated", Toast.LENGTH_LONG).show();
             pgr.setVisibility(View.INVISIBLE);
           }
@@ -90,10 +90,10 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
     super.onStart();
     //Get data from db and update physician Choice List.
 
-    new DatabaseConnector().getPhysicianControl(new DataReceiveInterface() {
+    new DatabaseConnector().getPhysicianControl(new MyStatListener() {
       @Override
-      public void status(boolean isSuucess) {
-        if (isSuucess) {
+      public void status(boolean isSuccess, Object myObj) {
+        if (isSuccess) {
           physicianChoiceList = EntityClass.getInstance().getPhysicianChoiceList();
           setRecyclerView();
         } else {
@@ -165,6 +165,7 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
 
           case (R.id.signOut): {
             drawerLayout.closeDrawers();
+            SaveSharedPreference.clearUserData(PhysiciansSubjectHome.this);
             new DatabaseConnector().firebaseSignOut();
             startActivity(new Intent(PhysiciansSubjectHome.this, MainActivity.class));
             break;

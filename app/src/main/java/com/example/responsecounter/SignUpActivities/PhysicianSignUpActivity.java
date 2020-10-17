@@ -13,17 +13,28 @@ import android.widget.Toast;
 import com.example.responsecounter.HomeActivites.PhysicianHome;
 import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
-import com.example.util.Interfaces.ValidationInterfaces.SignUpInterface;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.util.Interfaces.MyStatListener;
+import com.example.util.ValidateEmail;
 
 
 public class PhysicianSignUpActivity extends AppCompatActivity {
-
+    /**
+     * User email is the edit text box for the user to enter email on the screen.
+     */
     private EditText userEmail;
+    /**
+     * Pwd is the edit text box for the user to enter pwd on the screen.
+     */
     private EditText pwd;
-    private EditText userId;
+    /**
+     * userName text box for the user to enter on the screen.
+     */
+    private EditText userName;
     private ProgressBar pgr;
-    private FirebaseUser currentUser;
+
+    /**
+     * Create account button for submission of the form.
+     */
     private Button createAccount;
 
     @Override
@@ -34,26 +45,46 @@ public class PhysicianSignUpActivity extends AppCompatActivity {
         createAccount = findViewById(R.id.signUpBtn_signup);
         pgr = findViewById(R.id.create_Progress);
         userEmail = findViewById(R.id.username_signup_tb);
-        userId = findViewById(R.id.uerId_signup_tb);
+        userName = findViewById(R.id.userName_signup_tb);
         pwd = findViewById(R.id.pwd_signup_tb);
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createEmailUserAccount(userEmail.getText().toString(), pwd.getText().toString(), userId.getText().toString());
+
+                //Validates the email checks if it exists or not.
+                new ValidateEmail(userEmail.getText().toString(), new MyStatListener() {
+                    @Override
+                    public void status(boolean isSuccess, Object obj) {
+                        if(isSuccess) {
+                            createEmailUserAccount(userEmail.getText().toString(), pwd.getText().toString(), userName.getText().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String errMessage) {
+                        Toast.makeText(PhysicianSignUpActivity.this, errMessage, Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
     }
 
+    /**
+     * Creates a new email and account in the firebase for the user.
+     * @param email user Email
+     * @param password user Password
+     * @param userId user Name.
+     */
     private void createEmailUserAccount(String email, String password, final String  userId) {
         if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(userId)) {
 
             pgr.setVisibility(View.VISIBLE);
 
             DatabaseConnector obj = new DatabaseConnector();
-            obj.createUserAccount(email, password, userId, new SignUpInterface() {
+            obj.createUserAccount(email, password, userId, new MyStatListener() {
                 @Override
-                public void signUpStatus(boolean isSuccess) {
+                public void status(boolean isSuccess, Object obj) {
                     if(isSuccess) {
                         pgr.setVisibility(View.INVISIBLE);
                         startActivity(new Intent(PhysicianSignUpActivity.this, PhysicianHome.class));

@@ -6,9 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -20,24 +17,27 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.R;
+import com.example.responsecounter.SignInActivities.SignInActivity;
 import com.example.util.DatabaseConnector;
-import com.example.util.EntityClass;
-import com.example.util.Interfaces.DataInterfaces.SubjectList;
-import com.example.util.Interfaces.ValidationInterfaces.SubjectInterface;
+import com.example.util.Interfaces.MyStatListener;
+import com.example.util.Interfaces.SubjectList;
 import com.example.util.Models.PhysicianDetailModel;
 import com.example.util.Models.SubjectDetailModel;
+import com.example.util.SaveSharedPreference;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
 public class PhysicianHome extends AppCompatActivity {
 
+    /**
+     *  backButtonCount to count number of times back is pressed
+     */
     private int backButtonCount = 0;
     private DrawerLayout dl;
     private ActionBarDrawerToggle toggle;
@@ -55,68 +55,107 @@ public class PhysicianHome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_physician_home);
+        if(PhysicianDetailModel.getInstance().getPhysicianEmail().isEmpty()) {
+            startActivity(new Intent(PhysicianHome.this, SignInActivity.class));
+        } else {
+            setUpNavigation();
+            updateDropDown();
+            submitBtn = findViewById(R.id.submit_btn_physicianHome);
+            userName = findViewById(R.id.username_tv);
+            pgr = findViewById(R.id.physicianHome_Progress);
 
-        setUpNavigation();
-        updateDropDown();
-        submitBtn = findViewById(R.id.submit_btn_physicianHome);
-        userName = findViewById(R.id.username_tv);
-        pgr = findViewById(R.id.physicianHome_Progress);
+            userName.setText(PhysicianDetailModel.getInstance().getPhysicianName());
+            SubjectDetailModel.getInstance().setSubjectName("");
+            SubjectDetailModel.getInstance().setSubjectEmail("");
 
-        userName.setText(PhysicianDetailModel.getInstance().getPhysicianName());
-        SubjectDetailModel.getInstance().setSubjectName("");
-        SubjectDetailModel.getInstance().setSubjectEmail("");
+            autoCompleteTextView.getText().clear();
 
-        autoCompleteTextView.getText().clear();
+            submitBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                    if(!TextUtils.isEmpty(autoCompleteTextView.getText().toString())) {
+                        pgr.setVisibility(View.VISIBLE);
+                        submitBtn.setEnabled(false);
+                        DatabaseConnector databaseConnector = new DatabaseConnector();
+                        databaseConnector.checkExistingSubject(autoCompleteTextView.getText().toString(), subjectName, new MyStatListener() {
+                            @Override
+                            public void status(boolean isSuccess, Object obj) {
+                                if(isSuccess) {
+                                    pgr.setVisibility(View.INVISIBLE);
+                                    submitBtn.setEnabled(true);
+                                    startActivity(new Intent(PhysicianHome.this, PhysiciansSubjectHome.class));
+                                }
+                            }
 
-                if(!TextUtils.isEmpty(autoCompleteTextView.getText().toString())) {
-                    pgr.setVisibility(View.VISIBLE);
-                    submitBtn.setEnabled(false);
-                    DatabaseConnector databaseConnector = new DatabaseConnector();
-                    databaseConnector.checkExistingSubject(autoCompleteTextView.getText().toString(), subjectName, new SubjectInterface() {
-                        @Override
-                        public void subjectExistOrCreated(boolean isSuccess) {
-                            if(isSuccess) {
+                            @Override
+                            public void onFailure(String errMessage) {
                                 pgr.setVisibility(View.INVISIBLE);
                                 submitBtn.setEnabled(true);
-                                startActivity(new Intent(PhysicianHome.this, PhysiciansSubjectHome.class));
                             }
-                        }
+                        });
+                    }
 
-                        @Override
-                        public void onFailure(String errMessage) {
-                            pgr.setVisibility(View.INVISIBLE);
-                            submitBtn.setEnabled(true);
-                        }
-                    });
                 }
+            });
 
+            autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // not used
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // not used
+                }
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.toString().split("email:").length == 2) {
+                        subjectName = s.toString().split("email:")[0];
+                        Editable text = new SpannableStringBuilder(s.toString().split("email:")[1]);
+                        s.replace(0, s.length(), text);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * This method is used to update the drop down.
+     */
+    private void updateDropDown(){
+        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.dropDownTextView_physicianHome);
+
+
+        DatabaseConnector databaseConnector = new DatabaseConnector();
+        databaseConnector.getSubjectsList(new SubjectList() {
+            @Override
+            public void getSubjectListStatus(boolean isSuccess, List<String> subjectData) {
+                if(isSuccess && !subjectData.isEmpty()){
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(PhysicianHome.this, android.R.layout.simple_list_item_1, subjectData);
+                    adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                    autoCompleteTextView.setThreshold(1);
+                    autoCompleteTextView.setAdapter(adapter);
+
+//                    String[] items = new String[subjectData.size()];
+//                    for(int i = 0; i< subjectData.size(); i++) {
+//                        items[i] = subjectData.get(i);
+//                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String errMessage) {
+                //
             }
         });
 
-        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // not used
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // not used
-            }
+    }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().split("email:").length == 2) {
-                    subjectName = s.toString().split("email:")[0];
-                    Editable text = new SpannableStringBuilder(s.toString().split("email:")[1]);
-                    s.replace(0, s.length(), text);
-                }
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     /**
@@ -140,6 +179,7 @@ public class PhysicianHome extends AppCompatActivity {
 
                     case(R.id.signOut) : {
                         dl.closeDrawers();
+                        SaveSharedPreference.clearUserData(PhysicianHome.this);
                         new DatabaseConnector().firebaseSignOut();
                         startActivity(new Intent(PhysicianHome.this, MainActivity.class));
                         break;
@@ -148,44 +188,6 @@ public class PhysicianHome extends AppCompatActivity {
                 return true;
             }
         });
-    }
-
-    /**
-     * This method is used to update the drop down.
-     */
-    private void updateDropDown(){
-        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.dropDownTextView_physicianHome);
-
-
-        DatabaseConnector databaseConnector = new DatabaseConnector();
-        databaseConnector.getSubjectsList(new SubjectList() {
-            @Override
-            public void getSubjectListStatus(boolean isSuccess, List<String> subjectData) {
-                if(isSuccess && !subjectData.isEmpty()){
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(PhysicianHome.this, android.R.layout.simple_list_item_1, subjectData);
-                    adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-                    autoCompleteTextView.setThreshold(1);
-                    autoCompleteTextView.setAdapter(adapter);
-
-                    String[] items = new String[subjectData.size()];
-                    for(int i = 0; i< subjectData.size(); i++) {
-                        items[i] = subjectData.get(i);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(String errMessage) {
-                //
-            }
-        });
-
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override

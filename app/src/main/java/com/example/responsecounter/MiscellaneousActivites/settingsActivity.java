@@ -15,10 +15,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.responsecounter.HomeActivites.PhysicianHome;
-import com.example.responsecounter.HomeActivites.SubjectHome;
 import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
-import com.example.util.Interfaces.DataInterfaces.ImageInterface;
+import com.example.util.Interfaces.MyStatListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -77,9 +76,10 @@ public class settingsActivity extends AppCompatActivity {
     private void updateDb(Uri imageUri) {
 
         DatabaseConnector obj = new DatabaseConnector();
-        obj.saveSubjectImage(imageUri, new ImageInterface() {
+        obj.saveSubjectImage(imageUri, new MyStatListener() {
             @Override
-            public void statusAndUri(boolean isSuccess, Uri uri) {
+            public void status(boolean isSuccess, Object obj) {
+                Uri uri = Uri.parse(String.valueOf(obj));
                 if(isSuccess) {
                     Log.d(TAG, "statusAndUri: Image Uploaded Successfully: " + uri.toString());
                 }

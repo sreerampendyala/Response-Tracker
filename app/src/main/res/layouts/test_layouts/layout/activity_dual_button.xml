@@ -11,7 +11,7 @@ android:id="@+id/dl_duel_Button_Activity">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground"
-    tools:context=".TestActivities.DuelButtonActivity">
+    tools:context=".TestActivities.DualButtonActivity">
 
     <Button
         android:id="@+id/buttonCount1"
@@ -44,13 +44,14 @@ android:id="@+id/dl_duel_Button_Activity">
 
     <EditText
         android:id="@+id/timerBox"
+        android:background="@drawable/textview_border"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:textColor="@color/mainTextColor"
+        android:textColor="@color/mainBackground"
         android:ems="10"
         android:inputType="time"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,12 +63,12 @@ android:id="@+id/dl_duel_Button_Activity">
 
     <Button
         android:id="@+id/startBtn"
-        android:layout_width="82dp"
-        android:layout_height="42dp"
-        android:background="@drawable/textview_border"
+        android:layout_width="118dp"
+        android:layout_height="58dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/textview_border"
         android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +79,7 @@ android:id="@+id/dl_duel_Button_Activity">
 
     <TextView
         android:id="@+id/resultTb"
-        android:layout_width="112dp"
+        android:layout_width="192dp"
         android:layout_height="46dp"
         android:background="@drawable/textview_border"
         android:layout_alignParentStart="true"
@@ -90,20 +91,7 @@ android:id="@+id/dl_duel_Button_Activity">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startBtn" />
 
-    <TextView
-        android:layout_width="372dp"
-        android:layout_height="wrap_content"
-        android:text="Duel Button Test- Tap on the buttons alternatively during the countdown which begins once you press start."
-        android:background="@drawable/textview_border"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.060000002" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

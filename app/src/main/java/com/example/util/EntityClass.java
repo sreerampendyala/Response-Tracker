@@ -12,6 +12,7 @@ import java.util.Map;
 public class EntityClass {
     private List<PhysicianChoiceModel> physicianChoiceList;
     private boolean isSubject;
+    private boolean isPractice;
 
     private static EntityClass instance;
 
@@ -20,6 +21,14 @@ public class EntityClass {
         if(instance == null)  instance = new EntityClass();
 
         return  instance;
+    }
+
+    public boolean isPractice() {
+        return isPractice;
+    }
+
+    public void setPractice(boolean practice) {
+        isPractice = practice;
     }
 
     public boolean isSubject() {

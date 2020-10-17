@@ -16,9 +16,9 @@
         <TextView
             android:layout_width="372dp"
             android:layout_height="wrap_content"
-            android:text="Single Button Test- Tap on the button during the countdown which begins once you press start."
+            android:text="Single-Button Tapping Task:\nPress the start button to begin the task. After pressing the start button, you will see a countdown to begin the task. When the countdown reaches zero, please tap the button with your index finger as many times as possible during 30 seconds. After the duration you will see the number of taps successfully made."
             android:background="@drawable/textview_border"
-            android:textSize="16sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:padding="8dp"

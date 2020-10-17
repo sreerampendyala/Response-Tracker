@@ -40,7 +40,6 @@ public class PhysicianChoiceAdapter extends RecyclerView.Adapter<PhysicianChoice
         final PhysicianChoiceModel physicianChoiceModelObject = physicianChoiceList.get(position);
 
         holder.textTvShow.setText(physicianChoiceModelObject.getLable());
-        Log.d("****************", "onBindViewHolder: " + String.valueOf(physicianChoiceModelObject.isValue()));
         holder.selectSwitch.setChecked(physicianChoiceModelObject.isValue());
         holder.selectSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

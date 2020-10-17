@@ -11,7 +11,8 @@ import android.widget.Toast;
 
 import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
-import com.example.util.Interfaces.ValidationInterfaces.PasswordResetInterface;
+import com.example.util.Interfaces.MyStatListener;
+
 
 public class PasswordReset extends AppCompatActivity {
 
@@ -33,14 +34,20 @@ public class PasswordReset extends AppCompatActivity {
           Toast.makeText(PasswordReset.this, "Please Enter Your Email", Toast.LENGTH_LONG).show();
         }
         else {
-          new DatabaseConnector().forgotPassword(emailBox.getText().toString(), new PasswordResetInterface() {
+          new DatabaseConnector().forgotPassword(emailBox.getText().toString(), new MyStatListener() {
             @Override
-            public void status(boolean isSuccess, String msg) {
+            public void status(boolean isSuccess, Object obj) {
+              String msg = String.valueOf(obj);
               if(isSuccess) {
                 Toast.makeText(PasswordReset.this, msg, Toast.LENGTH_LONG).show();
                 finish();
               }
               else Toast.makeText(PasswordReset.this, msg, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(String errMessage) {
+
             }
           });
         }
