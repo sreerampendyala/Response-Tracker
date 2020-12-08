@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/dl_Subject_duelButtonIstructions_Activity">
+    android:id="@+id/dl_Subject_SignleButtonIstructions_Activity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/mainBackground"
-        tools:context=".Instructions.DualButtonInstructions">
+        tools:context=".Instructions.SingleButtonInstructions">
 
         <TextView
             android:id="@+id/textView3"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/textview_border"
             android:padding="8dp"
-            android:text="Two-Button Tapping Task:\nPress the start button to begin the task. After pressing the start button, you will see a countdown to begin the task. When the countdown begins, please use your index finger to alternate taps between the two buttons as many times as possible during 30 seconds. After completion of the task you can see the number of taps successfully made.\nThe test will be taken in 3 continuous rounds, the average of the observations are recorded."
+            android:text="Single-Button Tapping Task:\nPress the start button to begin the task. After pressing the start button, you will see a countdown to begin the task. When the countdown begins, please tap the button with your index finger as many times as possible during 30 seconds. After the duration you will see the number of taps successfully made.\nThe test will be taken in 3 continuous rounds, the average of the observations are recorded."
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -33,7 +33,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="150dp"
             android:layout_height="250dp"
-            android:src="@drawable/dual_tap_test_preview"
+            android:src="@drawable/single_button_test_preview"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
             app:layout_constraintVertical_bias="0.26" />
 
         <Button
-            android:id="@+id/dual_button_practice"
+            android:id="@+id/single_button_practice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -56,7 +56,7 @@
             app:layout_constraintVertical_bias="0.89" />
 
         <Button
-            android:id="@+id/dual_button_take_test"
+            android:id="@+id/single_button_take_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/textview_border"
@@ -72,4 +72,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
-

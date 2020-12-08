@@ -563,7 +563,7 @@ public class DatabaseConnector {
         .addOnSuccessListener(new OnSuccessListener<Void>() {
           @Override
           public void onSuccess(Void aVoid) {
-
+            myStatListener.status(true, null);
           }
         }).addOnFailureListener(new OnFailureListener() {
       @Override

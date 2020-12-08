@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.responsecounter.Instructions.DualButtonInstructions;
+import com.example.responsecounter.Instructions.SingleButtonInstructions;
+import com.example.responsecounter.MiscellaneousActivites.HelpActivity;
 import com.example.responsecounter.MiscellaneousActivites.ReportActivity;
 import com.example.responsecounter.MiscellaneousActivites.settingsActivity;
 import com.example.responsecounter.MainActivity;
@@ -110,9 +112,7 @@ public class SubjectHome extends AppCompatActivity {
                       } catch (Exception e) {
                         Log.d(TAG, "onClick: " + e.getMessage());
                       }
-                      EntityClass.getInstance().changeValueAtPhysicianChoiseList(EntityClass.getInstance().getPhysicianChoiceList().indexOf(setting), false);
-                      updatePhysicianChoice();
-                      startActivity(new Intent(SubjectHome.this, SingleButtonActivity.class));
+                      startActivity(new Intent(SubjectHome.this, SingleButtonInstructions.class));
                     }
                   });
                 } else if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.DoubleButtonLbl))) {
@@ -239,7 +239,7 @@ public class SubjectHome extends AppCompatActivity {
 
           case (R.id.myhelp): {
             dl.closeDrawers();
-            startActivity(new Intent(SubjectHome.this, Help.class));
+            startActivity(new Intent(SubjectHome.this, HelpActivity.class));
             break;
           }
 

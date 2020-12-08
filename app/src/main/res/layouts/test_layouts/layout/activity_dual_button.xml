@@ -13,34 +13,52 @@ android:id="@+id/dl_duel_Button_Activity">
     android:background="@color/mainBackground"
     tools:context=".TestActivities.DualButtonActivity">
 
-    <Button
-        android:id="@+id/buttonCount1"
-        android:layout_width="129dp"
-        android:layout_height="124dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/round_button"
-        android:text="Click"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/doubleButton_test_click_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.184"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/buttonCount2"
-        android:layout_width="129dp"
-        android:layout_height="124dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/round_button"
-        android:text="Click"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.643"
-        app:layout_constraintStart_toEndOf="@+id/buttonCount1"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mainBackground"
+            android:orientation="horizontal"
+            android:paddingStart="35dp"
+            android:paddingTop="45dp"
+            android:paddingEnd="45dp"
+            android:paddingBottom="45dp">
+
+            <Button
+                android:id="@+id/buttonCount1"
+                android:layout_width="129dp"
+                android:layout_height="124dp"
+                android:background="@drawable/round_button"
+                android:text="@string/tap"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.184"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonCount2"
+                android:layout_width="129dp"
+                android:layout_height="124dp"
+                android:layout_marginStart="55dp"
+                android:background="@drawable/round_button"
+                android:text="@string/tap"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.643"
+                app:layout_constraintStart_toEndOf="@+id/buttonCount1"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
     <EditText
         android:id="@+id/timerBox"
@@ -52,6 +70,7 @@ android:id="@+id/dl_duel_Button_Activity">
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:textColor="@color/mainBackground"
+        android:gravity="center"
         android:ems="10"
         android:inputType="time"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -81,6 +100,8 @@ android:id="@+id/dl_duel_Button_Activity">
         android:id="@+id/resultTb"
         android:layout_width="192dp"
         android:layout_height="46dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
         android:background="@drawable/textview_border"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"

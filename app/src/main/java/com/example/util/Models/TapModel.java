@@ -1,11 +1,11 @@
 package com.example.util.Models;
 
-import android.app.Application;
-
 public class TapModel {
-    private int count;
-    private int timerDuration;
-    private int avgSpeed;
+    private int correctTapsCount;
+    private double avgTimeBetweenTaps;
+    private double sdTimebwTaps;
+    private int wrongTapsCount;
+    private double avgSpeed;
 //    private boolean showReport;
 //    private boolean showDoubleTapTest;
 //    private boolean showSingleTapTest;
@@ -15,34 +15,50 @@ public class TapModel {
 
     }
 
-    public TapModel(int count, int timerDuration, int avgSpeed) {
-        this.count = count;
-        this.timerDuration = timerDuration;
-        this.avgSpeed = avgSpeed;
+    public TapModel(int correctCount, int avgTimeBetweenTaps, int sdTimebwTaps, int wrongCounts) {
+        this.correctTapsCount = correctCount;
+        this.avgTimeBetweenTaps = avgTimeBetweenTaps;
+        this.sdTimebwTaps = sdTimebwTaps;
+        this.wrongTapsCount = wrongCounts;
     }
 
-    public int getCount() {
-        return count;
+    public int getCorrectTapsCount() {
+        return correctTapsCount;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setCorrectTapsCount(int correctTapsCount) {
+        this.correctTapsCount = correctTapsCount;
     }
 
-    public int getTimerDuration() {
-        return timerDuration;
+    public double getAvgTimeBetweenTaps() {
+        return avgTimeBetweenTaps;
     }
 
-    public void setTimerDuration(int timerDuration) {
-        this.timerDuration = timerDuration;
+    public void setAvgTimeBetweenTaps(double avgTimeBetweenTaps) {
+        this.avgTimeBetweenTaps = avgTimeBetweenTaps;
     }
 
-    public int getAvgSpeed() {
+    public double getSdTimebwTaps() {
+        return sdTimebwTaps;
+    }
+
+    public void setSdTimebwTaps(double sdTimebwTaps) {
+        this.sdTimebwTaps = sdTimebwTaps;
+    }
+
+    public int getWrongTapsCount() {
+        return wrongTapsCount;
+    }
+
+    public void setWrongTapsCount(int wrongTapsCount) {
+        this.wrongTapsCount = wrongTapsCount;
+    }
+
+    public double getAvgSpeed() {
         return avgSpeed;
     }
 
-    public void setAvgSpeed(int avgSpeed) {
+    public void setAvgSpeed(double avgSpeed) {
         this.avgSpeed = avgSpeed;
     }
-
 }

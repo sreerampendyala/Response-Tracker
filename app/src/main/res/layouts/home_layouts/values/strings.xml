@@ -16,4 +16,5 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="ready_for_next_round">Ready for next round!</string>
+    <string name="tap">Tap</string>
 </resources>
