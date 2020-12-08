@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.responsecounter.MainActivity;
+import com.example.responsecounter.MiscellaneousActivites.HelpActivity;
 import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
 import com.example.responsecounter.MiscellaneousActivites.ReportActivity;
 import com.example.responsecounter.R;
@@ -38,7 +39,6 @@ import java.util.List;
 public class PhysiciansSubjectHome extends AppCompatActivity {
 
   private RecyclerView recyclerView;
-  private RecyclerView.Adapter mAdapter;
   private RecyclerView.LayoutManager layoutManager;
   private List<PhysicianChoiceModel> physicianChoiceList = new ArrayList<>();
 
@@ -126,6 +126,7 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
     recyclerView.setLayoutManager(layoutManager);
 
     PhysicianChoiceAdapter physicianChoiceAdapter = new PhysicianChoiceAdapter(physicianChoiceList);
+    recyclerView.setHasFixedSize(true);
     recyclerView.setItemAnimator(new DefaultItemAnimator());
     recyclerView.setAdapter(physicianChoiceAdapter);
 
@@ -159,7 +160,7 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
 
           case (R.id.myhelp): {
             drawerLayout.closeDrawers();
-            startActivity(new Intent(PhysiciansSubjectHome.this, Help.class));
+            startActivity(new Intent(PhysiciansSubjectHome.this, HelpActivity.class));
             break;
           }
 

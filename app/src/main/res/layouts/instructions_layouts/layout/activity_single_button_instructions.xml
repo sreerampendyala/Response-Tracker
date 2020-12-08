@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/textview_border"
             android:padding="8dp"
-            android:text="Single-Button Tapping Task:\nPress the start button to begin the task. After pressing the start button, you will see a countdown to begin the task. When the countdown begins, please tap the button with your index finger as many times as possible during 30 seconds. After the duration you will see the number of taps successfully made.\nThe test will be taken in 3 continuous rounds, the average of the observations are recorded."
+            android:text="Single-Button Tapping Task:\nPlease select either a practice trail or start the test using the buttons below, after pressing either Practice or Take Test buttons.\nPress the start button to begin the task. After pressing the start button, you will see a countdown to begin the task. When the countdown begins, please tap the button with your index finger as many times as possible during 30 seconds. After the duration you will see the number of taps successfully made.\nThe test will be taken in 3 continuous rounds, the average of the observations are recorded."
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="bold"

@@ -58,7 +58,7 @@ public class PhysicianChoiceAdapter extends RecyclerView.Adapter<PhysicianChoice
         return physicianChoiceList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
+    public static class ViewHolder extends RecyclerView.ViewHolder
     {
         TextView textTvShow;
         CardView cv;

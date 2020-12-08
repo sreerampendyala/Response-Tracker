@@ -545,9 +545,43 @@ public class DatabaseConnector {
         }
       });
     } catch (Exception ex) {
-      ex.printStackTrace();
+      Log.d(TAG, "getSubjectImage: " + ex.getMessage());
     }
 
+  }
+
+  /**
+   * This method is used to get the report image from the Firebase.
+   * @param image_id - It is DoubleTapTest or SingleTapTest etc. name of the images.
+   * @param myStatListener - For callback, MyStatListener.
+   */
+  public void getReportImage(String image_id, final MyStatListener myStatListener) {
+    try {
+      storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://response-counter-138b6.appspot.com");
+      StorageReference filePath = storageReference.child("Subjects_Images").child(SubjectDetailModel.getInstance().getUserIdInDb()).child(image_id);
+
+      filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        @Override
+        public void onSuccess(Uri uri) {
+          if (uri != null) {
+            myStatListener.status(true, uri);
+          } else {
+            Log.d(TAG, "onSuccess: " + "Uri Error");
+            myStatListener.status(false, null);
+            myStatListener.onFailure("Uri Error");
+          }
+        }
+      }).addOnFailureListener(new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+          Log.d(TAG, "onFailure: " + e.getMessage());
+          myStatListener.status(false, null);
+          myStatListener.onFailure(e.getMessage());
+        }
+      });
+    } catch (Exception ex) {
+      Log.d(TAG, "getSubjectImage: " + ex.getMessage());
+    }
   }
 
   /**

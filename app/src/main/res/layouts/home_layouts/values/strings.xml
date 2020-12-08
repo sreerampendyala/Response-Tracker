@@ -2,7 +2,7 @@
     <string name="test_activity_available">Test Activity Available</string>
     <string name="report_available">See Results</string>
     <string name="active">Active</string>
-    <string name="please_setup_patient_access">To set up patient access:</string>
+    <string name="please_setup_patient_access">Set up patient access:</string>
     <string name="submit">Submit</string>
     <string name="journal">Journal</string>
     <string name="settings">Settings</string>

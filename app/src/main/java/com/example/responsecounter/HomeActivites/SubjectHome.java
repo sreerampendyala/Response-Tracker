@@ -5,8 +5,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +54,7 @@ public class SubjectHome extends AppCompatActivity {
   private ImageView image;
   private Button singleTestBtn, doubleTestBtn;
   private Button reportsAvailable;
+  private Button instructionsBtn;
 
   private final String TAG = "SubjectHome";
 
@@ -66,6 +69,8 @@ public class SubjectHome extends AppCompatActivity {
     singleTestBtn =findViewById(R.id.subject_singletest_button);
     doubleTestBtn = findViewById(R.id.subject_duelTest_button);
     reportsAvailable = findViewById(R.id.patientHome_ReportAvailable);
+    instructionsBtn = findViewById(R.id.instruction_subject_home_btn);
+
     reportsAvailable.setEnabled(false);
     singleTestBtn.setEnabled(false);
     doubleTestBtn.setEnabled(false);
@@ -73,7 +78,29 @@ public class SubjectHome extends AppCompatActivity {
         "Email:\t\t" + SubjectDetailModel.getInstance().getSubjectEmail() + "\n" +
         "Age:\t\t" + SubjectDetailModel.getInstance().getSubjectAge() + "\n";
     subjectInfo.setText(data);
-    buttonAction();
+
+    instructionsBtn.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        createDialogue();
+      }
+    });
+  }
+
+  /**
+   * This Method is used to create a dialogue for instructions.
+   */
+  private void createDialogue() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    // Get the layout inflater
+    builder.setMessage(R.string.patient_home_instructions)
+        // Add action buttons
+        .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int id) {
+          }
+        });
+    builder.create().show();
   }
 
   public void buttonAction() {
@@ -155,6 +182,7 @@ public class SubjectHome extends AppCompatActivity {
     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     stopMyService();
     notificationManager.cancelAll();
+    buttonAction();
   }
 
   @Override
