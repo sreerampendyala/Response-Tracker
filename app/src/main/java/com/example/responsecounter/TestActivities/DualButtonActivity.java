@@ -33,13 +33,14 @@ import com.example.util.EntityClass;
 import com.example.util.Interfaces.MyStatListener;
 import com.example.util.Models.PhysicianChoiceModel;
 import com.example.util.Models.TapModel;
+import com.example.util.SaveSharedPreference;
 import com.example.util.SetupOptions;
-import com.google.android.material.math.MathUtils;
 import com.google.android.material.navigation.NavigationView;
 
 import java.text.DecimalFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DualButtonActivity extends AppCompatActivity {
 
@@ -62,6 +63,9 @@ public class DualButtonActivity extends AppCompatActivity {
   ArrayList<Float> x2 = new ArrayList<Float>();
   ArrayList<Float> y2 = new ArrayList<Float>();
 
+  ArrayList<TapModel> myList_TapModels = new ArrayList<>();
+
+  private int trail1_length, trail2_length;
   /**
    * These variables are used to hold the number of times the buttons are pressed respectively.(count1 and count2)
    * count3 is used to track wrong taps.
@@ -229,14 +233,105 @@ public class DualButtonActivity extends AppCompatActivity {
         return  distance * 2.54;
       }
 
+      /**
+       * This Method is used to calculate the average time between consecutive taps.
+       * @param my_timeList Should be NULL unless provided timeList that is not global already.
+       * @return The average time between taps.
+       */
+      private double getAvgTime(ArrayList<Double> my_timeList) {
+        double avgTime;
+        double sum = 0;
+        ArrayList<Double> time_List = new ArrayList<>();
+        if (my_timeList == null) {
+          time_List = timeList;
+        } else time_List = my_timeList;
+        for (double val : time_List) {
+          sum = sum + val;
+        }
+        avgTime = sum/time_List.size();
+        return avgTime;
+      }
+
+      /**
+       * This Method is used to get the standard deviation among the time between the consecutive taps.
+       * @param avgTime The average time calculated for two continuous taps.
+       * @param my_timeList Should be NULL unless provided timeList that is not global already.
+       * @return The standard deviation.
+       */
+      private double getStandardDeviation(double avgTime, ArrayList<Double> my_timeList) {
+        double stdDev, sum = 0;
+        ArrayList<Double> time_List = new ArrayList<>();
+        if (my_timeList == null) {
+          time_List = timeList;
+        } else time_List = my_timeList;
+
+        for(double val : time_List) {
+          sum = sum + Math.pow(Math.abs(val -avgTime), 2);
+        }
+
+        stdDev = Math.sqrt((double) sum/time_List.size());
+        return stdDev;
+      }
+
+      private void saveTrailData(int testNum) {
+        String docName;
+        docName =  testNum == 1 ? "Test1" : testNum == 2 ? "Test2" : "Test3";
+
+        if(testNum == 1) {
+          double avgTime, stdDev;
+          avgTime = getAvgTime(null);
+          stdDev = getStandardDeviation(avgTime, null);
+          TapModel record = new TapModel();
+          record.setAvgSpeed(avgDistance()/ avgTime);
+          record.setSdTimebwTaps(stdDev);
+          record.setAvgTimeBetweenTaps(avgTime);
+          record.setCorrectTapsCount((correctTaps[0]));
+          record.setWrongTapsCount((wrongTaps[0]));
+          myList_TapModels.add(record);
+
+        } else if(testNum == 2) {
+          ArrayList<Double> myTime_List = new ArrayList<>(timeList.subList(trail1_length-1, timeList.size()));
+          double avgTime, stdDev;
+          avgTime = getAvgTime(myTime_List);
+          stdDev = getStandardDeviation(avgTime, myTime_List);
+          TapModel record = new TapModel();
+          record.setAvgSpeed(avgDistance()/ avgTime);
+          record.setSdTimebwTaps(stdDev);
+          record.setAvgTimeBetweenTaps(avgTime);
+          record.setCorrectTapsCount((correctTaps[1]));
+          record.setWrongTapsCount((wrongTaps[1]));
+          myList_TapModels.add(record);
+        } else if(testNum == 3) {
+          ArrayList<Double> myTime_List = new ArrayList<>(timeList.subList(trail2_length-1, timeList.size()));
+          double avgTime, stdDev;
+          avgTime = getAvgTime(myTime_List);
+          stdDev = getStandardDeviation(avgTime, myTime_List);
+          TapModel record = new TapModel();
+          record.setAvgSpeed(avgDistance()/ avgTime);
+          record.setSdTimebwTaps(stdDev);
+          record.setAvgTimeBetweenTaps(avgTime);
+          record.setCorrectTapsCount((correctTaps[2]));
+          record.setWrongTapsCount((wrongTaps[2]));
+          myList_TapModels.add(record);
+        }
+      }
+
       @SuppressLint("SetTextI18n")
       @Override
       public void onFinish() {
         if (EntityClass.getInstance().isPractice()) {
           txtView.setText("Total Count: " + (count1 + count2));
+          Handler handler = new Handler();
+          handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              finish();
+            }
+          }, 3000);
           return;
         }
 
+        EntityClass.removeFromExistingNotifications(1);
         startBtn.setEnabled(false);
         timeBox.setText("Finished !!");
         txtView = findViewById(R.id.resultTb);
@@ -253,43 +348,77 @@ public class DualButtonActivity extends AppCompatActivity {
             for (int i = 0; i < size; i ++) {
               timeList.add(((double)Math.abs(t1.get(i) - t2.get(i)))/1000);
             }
+
+            if(testNum == 1) trail1_length = timeList.size();
+            else if(testNum == 2) trail2_length = timeList.size();
+            saveTrailData(testNum);
             if (testNum < 3) {
               testNum++;
               t1.clear();
               t2.clear();
               createDialogue();
               return;
-            } else if (testNum == 4) startBtn.setEnabled(false);
+            } else if (testNum == 3) startBtn.setEnabled(false);
             Log.d(TAG, "&^&^&^&^&^&^&^" + timeList);
 
-            double avgTime, stdDev;
-            double sum = 0;
-            for (double val : timeList) {
-              sum = sum + val;
-            }
+            double avgTime = getAvgTime(null);
+            double stdDev = getStandardDeviation(avgTime, null);
 
-            avgTime = sum/timeList.size();
-            sum = 0;
-            for(double val : timeList) {
-              sum = sum + Math.pow(Math.abs(val -avgTime), 2);
-            }
-
-            stdDev = Math.sqrt((double) sum/timeList.size());
-
-            final TapModel record = new TapModel();
-
-            record.setAvgSpeed(avgDistance()/avgTime);
+            TapModel record = new TapModel();
+            record.setAvgSpeed(avgDistance()/ avgTime);
             record.setSdTimebwTaps(stdDev);
             record.setAvgTimeBetweenTaps(avgTime);
             record.setCorrectTapsCount((correctTaps[0] + correctTaps[1] + correctTaps[2]) / 3);
             record.setWrongTapsCount((wrongTaps[0] + wrongTaps[1] + wrongTaps[2]) / 3);
             try {
-              String timestamp = String.valueOf(ZonedDateTime.now().toInstant().toEpochMilli());
+              final String timestamp = String.valueOf(ZonedDateTime.now().toInstant().toEpochMilli());
               DatabaseConnector dbObj = new DatabaseConnector();
               dbObj.saveData("TestData/DoubleTapData/" + timestamp + "/", record, new MyStatListener() {
                 @Override
                 public void status(boolean isSuccess, Object obj) {
                   if (isSuccess) {
+                    int localIndex = 0;
+                    String local_path = "TestData/DoubleTapData/" + timestamp + "/";
+                    for (TapModel record : myList_TapModels) {
+                      if(localIndex == 0) {
+                        new DatabaseConnector().saveData(local_path + "Trails/Trail1", record, new MyStatListener() {
+                          @Override
+                          public void status(boolean isSuccess, Object obj) {
+
+                          }
+
+                          @Override
+                          public void onFailure(String errMessage) {
+
+                          }
+                        });
+                      } else if (localIndex == 1) {
+                        new DatabaseConnector().saveData(local_path + "Trails/Trail2", record, new MyStatListener() {
+                          @Override
+                          public void status(boolean isSuccess, Object obj) {
+
+                          }
+
+                          @Override
+                          public void onFailure(String errMessage) {
+
+                          }
+                        });
+                      } else {
+                        new DatabaseConnector().saveData(local_path + "Trails/Trail3", record, new MyStatListener() {
+                          @Override
+                          public void status(boolean isSuccess, Object obj) {
+
+                          }
+
+                          @Override
+                          public void onFailure(String errMessage) {
+
+                          }
+                        });
+                      }
+                      localIndex ++;
+                    }
                     updatePhysicianChoice();
                     startBtn.setEnabled(true);
                     startActivity(new Intent(DualButtonActivity.this, SubjectHome.class));
@@ -364,6 +493,8 @@ public class DualButtonActivity extends AppCompatActivity {
           case (R.id.signOut): {
             dl.closeDrawers();
             new DatabaseConnector().firebaseSignOut();
+            SaveSharedPreference.clearUserData(DualButtonActivity.this);
+            EntityClass.getInstance().stopMyService(getApplicationContext());
             startActivity(new Intent(DualButtonActivity.this, MainActivity.class));
             break;
           }

@@ -1,5 +1,8 @@
 package com.example.util;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.example.util.Models.PhysicianChoiceModel;
 
 
@@ -13,6 +16,8 @@ public class EntityClass {
     private List<PhysicianChoiceModel> physicianChoiceList;
     private boolean isSubject;
     private boolean isPractice;
+
+    private static List<Integer> existingNotifications = new ArrayList<Integer>();
 
     private static EntityClass instance;
 
@@ -57,6 +62,9 @@ public class EntityClass {
     public String getLbl(SetupOptions setup) {
         String returnLbl = null;
         switch (setup) {
+            case posturalStabilityLbl:
+                returnLbl = "Postural Stability Test";
+                break;
             case ReportLbl:
                 returnLbl =  "Reports";
                 break;
@@ -80,4 +88,27 @@ public class EntityClass {
         return map;
     }
 
+    public void startMyService(Context ctx) {
+        ctx.startService(new Intent(ctx, CreateChannel.class));
+    }
+
+    public void stopMyService(Context ctx) {
+        ctx.stopService(new Intent(ctx, CreateChannel.class));
+    }
+
+    public static List<Integer> getExistingNotifications() {
+        return existingNotifications;
+    }
+
+    public static void removeAllNotifications() {
+        EntityClass.existingNotifications.removeAll(EntityClass.getExistingNotifications());
+    }
+
+    public static void addToExistingNotifications(int code) {
+        EntityClass.existingNotifications.add(code);
+    }
+
+    public static void removeFromExistingNotifications(int code) {
+        EntityClass.existingNotifications.remove(new Integer(code));
+    }
 }

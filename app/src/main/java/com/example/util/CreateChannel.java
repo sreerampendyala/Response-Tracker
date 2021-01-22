@@ -17,6 +17,9 @@ import com.example.responsecounter.R;
 import com.example.util.Interfaces.MyStatListener;
 import com.example.util.Models.PhysicianChoiceModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CreateChannel extends Service {
 
   public static final String CHANNEL_1_ID = "channel1";
@@ -44,12 +47,13 @@ public class CreateChannel extends Service {
 
   public int onStartCommand (Intent intent , int flags , int startId) {
     super .onStartCommand(intent , flags , startId) ;
-    startService(new Intent(this, DatabaseConnector.class));
+    startService(new Intent(getApplicationContext(), DatabaseConnector.class));
     listenDb();
     return START_STICKY ;
   }
 
   private void  listenDb() {
+    if(! new DatabaseConnector().CheckLogInFireBase()) return;
     new DatabaseConnector().getPhysicianControl(new MyStatListener() {
       @Override
       public void status(boolean isSuccess, Object obj) {
@@ -63,6 +67,8 @@ public class CreateChannel extends Service {
                 addNotification(setting.getLable(), SetupOptions.SingleButtonLbl.ordinal());
               } else if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.DoubleButtonLbl))) {
                 addNotification(setting.getLable(), SetupOptions.DoubleButtonLbl.ordinal());
+              } else if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.posturalStabilityLbl))) {
+                addNotification(setting.getLable(), SetupOptions.posturalStabilityLbl.ordinal());
               }
             }
           }
@@ -77,7 +83,11 @@ public class CreateChannel extends Service {
   }
 
   private void addNotification(String activityName, int code) {
-    Log.d("class", "addNotification: $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    if(code == 0) code = 3;
+    if(EntityClass.getExistingNotifications().contains(code)) return;
+    EntityClass.addToExistingNotifications(code);
+
+    Log.d("class", "addNotification: $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" + code);
     if(EntityClass.getInstance().isSubject()) {
       Intent finalIntent = new Intent(this, SubjectHome.class);
       finalIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -89,6 +99,7 @@ public class CreateChannel extends Service {
           .setContentTitle("Activity Available")
           .setContentText(activityName)
           .setContentIntent(resultPendingIntent)
+          .setPriority(NotificationCompat.DEFAULT_ALL)
           .setAutoCancel(true);
 
       NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -103,6 +114,7 @@ public class CreateChannel extends Service {
     Intent intent = new Intent("com.android.ServiceStopped");
     Log.d("TAG", "onTaskRemoved: STOPPED STOPPED");
     sendBroadcast(intent);
+    stopService(new Intent(getApplicationContext(), DatabaseConnector.class));
 
   }
 
@@ -110,6 +122,6 @@ public class CreateChannel extends Service {
   public void onDestroy() {
     super.onDestroy();
     Log.d("TAG", "onDestroy: DESTROY DESTROY");
-    stopService(new Intent(this, DatabaseConnector.class));
+    stopService(new Intent(getApplicationContext(), DatabaseConnector.class));
   }
 }

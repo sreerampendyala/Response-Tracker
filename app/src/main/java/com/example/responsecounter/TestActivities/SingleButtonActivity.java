@@ -33,6 +33,7 @@ import com.example.util.EntityClass;
 import com.example.util.Interfaces.MyStatListener;
 import com.example.util.Models.PhysicianChoiceModel;
 import com.example.util.Models.TapModel;
+import com.example.util.SaveSharedPreference;
 import com.example.util.SetupOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.rpc.Help;
@@ -194,8 +195,17 @@ public class SingleButtonActivity extends AppCompatActivity {
       public void onFinish() {
         if (EntityClass.getInstance().isPractice()) {
           txtView.setText("Total Count: " + (count1));
+          Handler handler = new Handler();
+          handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              finish();
+            }
+          }, 3000);
           return;
         }
+
+        EntityClass.removeFromExistingNotifications(3);
 
         startBtn.setEnabled(false);
         timeBox.setText("Finished !!");
@@ -310,6 +320,8 @@ public class SingleButtonActivity extends AppCompatActivity {
           case (R.id.signOut): {
             dl.closeDrawers();
             new DatabaseConnector().firebaseSignOut();
+            SaveSharedPreference.clearUserData(SingleButtonActivity.this);
+            EntityClass.getInstance().stopMyService(getApplicationContext());
             startActivity(new Intent(SingleButtonActivity.this, MainActivity.class));
             break;
           }

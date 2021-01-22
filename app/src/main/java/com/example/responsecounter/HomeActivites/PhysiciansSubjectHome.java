@@ -24,11 +24,15 @@ import com.example.util.SaveSharedPreference;
 import com.example.util.SetupOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.rpc.Help;
+import com.squareup.picasso.Picasso;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +52,9 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
   private ActionBarDrawerToggle toggle;
   private TextView subjectDetails;
 
+  private ImageView image;
+  private final String      TAG = "PhysicianSubjectHome";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -56,7 +63,7 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
     submitBtn = findViewById(R.id.physician_patient_home_submit_btn);
     pgr = findViewById(R.id.physicianChoiceUpdatePgr);
     subjectDetails = findViewById(R.id.physician_patientDetailsTextView);
-
+    image = findViewById(R.id.imgView_pic_physician_patientHome);
     setNavigation();
 
     String data = "Name:\t\t" + SubjectDetailModel.getInstance().getSubjectName() + "\n" +
@@ -85,9 +92,37 @@ public class PhysiciansSubjectHome extends AppCompatActivity {
     });
   }
 
+  private void getPictureOnStart() {
+    try {
+      DatabaseConnector obj = new DatabaseConnector();
+      obj.getSubjectImage(new MyStatListener() {
+        @Override
+        public void status(boolean isSuccess, Object obj) {
+          Uri uri = Uri.parse(String.valueOf(obj));
+          if (isSuccess) {
+            Picasso.get().load(uri).placeholder(R.drawable.user_picture_24dp)
+                .fit()
+                .into(image);
+          }
+        }
+
+        @Override
+        public void onFailure(String errMessage) {
+          //
+        }
+
+      });
+
+    } catch (Exception ex) {
+      Log.d(TAG, "getPictureOnStart: " + ex.getMessage());
+    }
+
+  }
+
   @Override
   protected void onStart() {
     super.onStart();
+    getPictureOnStart();
     //Get data from db and update physician Choice List.
 
     new DatabaseConnector().getPhysicianControl(new MyStatListener() {

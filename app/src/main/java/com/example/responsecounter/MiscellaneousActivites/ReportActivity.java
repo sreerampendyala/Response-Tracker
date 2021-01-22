@@ -12,11 +12,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.responsecounter.HomeActivites.PhysiciansSubjectHome;
 import com.example.responsecounter.HomeActivites.SubjectHome;
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.R;
 import com.example.util.DatabaseConnector;
+import com.example.util.EntityClass;
 import com.example.util.ReportLayoutAdapter;
+import com.example.util.SaveSharedPreference;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.rpc.Help;
@@ -78,6 +81,10 @@ public class ReportActivity extends AppCompatActivity {
           case(R.id.signOut) : {
             dl.closeDrawers();
             new DatabaseConnector().firebaseSignOut();
+            SaveSharedPreference.clearUserData(ReportActivity.this);
+            if(EntityClass.getInstance().isSubject()) {
+              EntityClass.getInstance().stopMyService(getApplicationContext());
+            }
             startActivity(new Intent(ReportActivity.this, MainActivity.class));
             break;
           }
@@ -94,10 +101,20 @@ public class ReportActivity extends AppCompatActivity {
   }
 
   @Override
-  public void onBackPressed()
-  {
+  protected void onStart() {
+    super.onStart();
+    EntityClass.removeFromExistingNotifications(2);
+  }
+
+  @Override
+  public void onBackPressed() {
     dl.closeDrawers();
-    startActivity(new Intent(ReportActivity.this, SubjectHome.class));
+    if(EntityClass.getInstance().isSubject()) {
+      startActivity(new Intent(ReportActivity.this, SubjectHome.class));
+    } else {
+      startActivity(new Intent(ReportActivity.this, PhysiciansSubjectHome.class));
+    }
+
   }
 
   private void drawGraph() {

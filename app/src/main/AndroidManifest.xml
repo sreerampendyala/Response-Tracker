@@ -15,22 +15,71 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+        android:windowSoftInputMode="adjustPan|adjustResize"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Instructions.SingleButtonInstructions"></activity>
-        <activity android:name=".Instructions.DualButtonInstructions" />
-        <activity android:name=".MiscellaneousActivites.PasswordReset" />
-        <activity android:name=".HomeActivites.PhysiciansSubjectHome" />
-        <activity android:name=".MiscellaneousActivites.settingsActivity" />
-        <activity android:name=".SignInActivities.SignInActivity" />
-        <activity android:name=".SignUpActivities.SubjectSignUpActivity" />
-        <activity android:name=".HomeActivites.PhysicianHome" />
-        <activity android:name=".MiscellaneousActivites.HelpActivity" />
-        <activity android:name=".MiscellaneousActivites.NoteActivity" />
-        <activity android:name=".TestActivities.SingleButtonActivity" />
-        <activity android:name=".SignUpActivities.PhysicianSignUpActivity" />
-        <activity android:name=".HomeActivites.SubjectHome" />
-        <activity android:name=".TestActivities.DualButtonActivity" />
-        <activity android:name=".MiscellaneousActivites.ReportActivity" />
+        <activity android:name=".TestActivities.PosturalStabilityActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Instructions.SingleButtonInstructions"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Instructions.DualButtonInstructions"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MiscellaneousActivites.PasswordReset"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HomeActivites.PhysiciansSubjectHome"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MiscellaneousActivites.settingsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SignInActivities.SignInActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SignUpActivities.SubjectSignUpActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HomeActivites.PhysicianHome"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MiscellaneousActivites.HelpActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MiscellaneousActivites.NoteActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TestActivities.SingleButtonActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SignUpActivities.PhysicianSignUpActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HomeActivites.SubjectHome"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TestActivities.DualButtonActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MiscellaneousActivites.ReportActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
@@ -45,13 +94,7 @@
         <service
             android:name="com.example.util.CreateChannel"
             android:label="@string/app_name">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <action android:name="android.intent.action.RESPOND_VIA_MESSAGE" />
-            </intent-filter>
         </service>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

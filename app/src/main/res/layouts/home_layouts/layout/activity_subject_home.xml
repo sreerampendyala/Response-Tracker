@@ -61,7 +61,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="4dp"
                 android:padding="8dp"
-                android:text="Instructions - click here"
+                android:text="Instructions - Tap here"
                 android:textColor="@color/mainTextColor"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -70,19 +70,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.13" />
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="center"-->
-<!--                android:text="@string/patient_home_instructions"-->
-<!--                android:textColor="@color/mainTextColor"-->
-<!--                android:textSize="12sp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.13" />-->
-
             <Button
                 android:id="@+id/subject_singletest_button"
                 android:layout_width="141dp"
@@ -91,7 +78,7 @@
                 android:elevation="4dp"
                 android:padding="8dp"
                 android:shadowColor="@color/mainTextColor"
-                android:text="Single-Button Tapping Task"
+                android:text="Single-Button Tapping Test"
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -110,7 +97,7 @@
                 android:elevation="4dp"
                 android:padding="8dp"
                 android:shadowColor="@color/mainTextColor"
-                android:text="Two-Button Tapping Task"
+                android:text="Two-Button Tapping Test"
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -130,9 +117,25 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.072"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.952" />
+
+            <Button
+                android:id="@+id/patientHome_posturalStabilityTestAvailable"
+                android:layout_width="141dp"
+                android:layout_height="135dp"
+                android:background="@drawable/textview_border"
+                android:padding="8dp"
+                android:text="Postural Stability Test"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.71"
+                app:layout_constraintStart_toEndOf="@+id/patientHome_ReportAvailable"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.95" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

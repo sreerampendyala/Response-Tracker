@@ -13,6 +13,74 @@
         android:background="@color/mainBackground"
         tools:context=".MiscellaneousActivites.NoteActivity">
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/note"
+            android:textColor="@color/mainTextColor"
+            android:textSize="45sp"
+            android:paddingStart="25dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.01999998" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="394dp"
+            android:layout_height="613dp"
+            android:background="@color/mainBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintVertical_bias="0.62">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/mainBackground"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/noteEditText"
+                    android:layout_width="409dp"
+                    android:layout_height="756dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@android:color/transparent"
+                    android:elevation="6dp"
+                    android:gravity="top"
+                    android:hint="@string/type_here"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:lineSpacingMultiplier="1.5"
+                    android:maxHeight="35dp"
+                    android:paddingStart="25dp"
+                    android:paddingTop="65dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="10dp"
+                    android:scrollbarThumbVertical="@color/mainTextColor"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/mainTextColor"
+                    android:textColorHint="@color/mainTextColor" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/noteIn_Progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="175dp"
+            android:indeterminateTint="@android:color/holo_orange_dark"
+            android:layout_height="36dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_View_Note"

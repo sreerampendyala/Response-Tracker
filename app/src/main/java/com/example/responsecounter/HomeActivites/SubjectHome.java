@@ -29,9 +29,7 @@ import com.example.responsecounter.MiscellaneousActivites.settingsActivity;
 import com.example.responsecounter.MainActivity;
 import com.example.responsecounter.MiscellaneousActivites.NoteActivity;
 import com.example.responsecounter.R;
-import com.example.responsecounter.TestActivities.DualButtonActivity;
-import com.example.responsecounter.TestActivities.SingleButtonActivity;
-import com.example.util.CreateChannel;
+import com.example.responsecounter.TestActivities.PosturalStabilityActivity;
 import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
 
@@ -41,7 +39,6 @@ import com.example.util.Models.SubjectDetailModel;
 import com.example.util.SaveSharedPreference;
 import com.example.util.SetupOptions;
 import com.google.android.material.navigation.NavigationView;
-import com.google.rpc.Help;
 import com.squareup.picasso.Picasso;
 
 
@@ -55,6 +52,7 @@ public class SubjectHome extends AppCompatActivity {
   private Button singleTestBtn, doubleTestBtn;
   private Button reportsAvailable;
   private Button instructionsBtn;
+  private Button posturalStabilityTest;
 
   private final String TAG = "SubjectHome";
 
@@ -64,6 +62,7 @@ public class SubjectHome extends AppCompatActivity {
     setContentView(R.layout.activity_subject_home);
     setPatientNavigation();
 
+    posturalStabilityTest = findViewById(R.id.patientHome_posturalStabilityTestAvailable);
     image = findViewById(R.id.imgView_pic_patientHome);
     subjectInfo = findViewById(R.id.patientDetailsTextView);
     singleTestBtn =findViewById(R.id.subject_singletest_button);
@@ -74,6 +73,7 @@ public class SubjectHome extends AppCompatActivity {
     reportsAvailable.setEnabled(false);
     singleTestBtn.setEnabled(false);
     doubleTestBtn.setEnabled(false);
+    posturalStabilityTest.setEnabled(false);
     String data = "Name:\t\t" + SubjectDetailModel.getInstance().getSubjectName() + "\n" +
         "Email:\t\t" + SubjectDetailModel.getInstance().getSubjectEmail() + "\n" +
         "Age:\t\t" + SubjectDetailModel.getInstance().getSubjectAge() + "\n";
@@ -85,6 +85,7 @@ public class SubjectHome extends AppCompatActivity {
         createDialogue();
       }
     });
+
   }
 
   /**
@@ -118,11 +119,6 @@ public class SubjectHome extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                       reportsAvailable.setEnabled(false);
-                      try{
-                        removeNotification(SetupOptions.ReportLbl.ordinal());
-                      } catch (Exception e) {
-                        Log.d(TAG, "onClick: " + e.getMessage());
-                      }
                       EntityClass.getInstance().changeValueAtPhysicianChoiseList(EntityClass.getInstance().getPhysicianChoiceList().indexOf(setting), false);
                       updatePhysicianChoice();
                       startActivity(new Intent(SubjectHome.this, ReportActivity.class));
@@ -134,11 +130,6 @@ public class SubjectHome extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                       singleTestBtn.setEnabled(false);
-                      try{
-                        removeNotification(SetupOptions.SingleButtonLbl.ordinal());
-                      } catch (Exception e) {
-                        Log.d(TAG, "onClick: " + e.getMessage());
-                      }
                       startActivity(new Intent(SubjectHome.this, SingleButtonInstructions.class));
                     }
                   });
@@ -148,12 +139,16 @@ public class SubjectHome extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                       doubleTestBtn.setEnabled(false);
-                      try{
-                        removeNotification(SetupOptions.DoubleButtonLbl.ordinal());
-                      } catch (Exception e) {
-                        Log.d(TAG, "onClick: " + e.getMessage());
-                      }
                       startActivity(new Intent(SubjectHome.this, DualButtonInstructions.class));
+                    }
+                  });
+                } else if(setting.getLable().equals(EntityClass.getInstance().getLbl(SetupOptions.posturalStabilityLbl))) {
+                  posturalStabilityTest.setEnabled(true);
+                  posturalStabilityTest.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                      posturalStabilityTest.setEnabled(false);
+                      startActivity(new Intent(SubjectHome.this, PosturalStabilityActivity.class));
                     }
                   });
                 }
@@ -170,40 +165,13 @@ public class SubjectHome extends AppCompatActivity {
     });
   }
 
-  private void removeNotification(int code) {
-    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    notificationManager.cancel(code);
-
-  }
   @Override
   protected void onStart() {
     super.onStart();
     getPictureOnStart();
     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    stopMyService();
     notificationManager.cancelAll();
     buttonAction();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    startMyService();
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    Log.d(TAG, "onDestroy: %GGGGGGGG%");
-  }
-
-
-  private void startMyService() {
-    startService(new Intent(this, CreateChannel.class));
-  }
-
-  private void stopMyService() {
-    stopService(new Intent(this, CreateChannel.class));
   }
 
   @Override
@@ -275,8 +243,8 @@ public class SubjectHome extends AppCompatActivity {
             dl.closeDrawers();
             SaveSharedPreference.clearUserData(SubjectHome.this);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            startMyService();
             notificationManager.cancelAll();
+            EntityClass.getInstance().stopMyService(getApplicationContext());
             new DatabaseConnector().firebaseSignOut();
             startActivity(new Intent(SubjectHome.this, MainActivity.class));
             break;

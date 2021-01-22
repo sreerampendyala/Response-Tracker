@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.example.responsecounter.HomeActivites.PhysicianHome;
 import com.example.responsecounter.HomeActivites.SubjectHome;
 import com.example.responsecounter.SignInActivities.SignInActivity;
+import com.example.util.CreateChannel;
+import com.example.util.DatabaseConnector;
 import com.example.util.EntityClass;
 import com.example.util.Models.PhysicianDetailModel;
 import com.example.util.Models.SubjectDetailModel;
@@ -30,15 +32,17 @@ public class MainActivity extends AppCompatActivity {
   private Button isPhysician;
 
   private int backButtonCount = 0;
+  private boolean isAlreadyLoggedIn = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
     checkIfAlreadyLoggedIn();
+    setContentView(R.layout.activity_main);
 
     isPatient = findViewById(R.id.button_isPatient);
     isPhysician = findViewById(R.id.button_isPhysician);
+    if(!isAlreadyLoggedIn) new DatabaseConnector().firebaseSignOut();
 
     isPatient.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -63,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
    */
   private void checkIfAlreadyLoggedIn() {
     if (SaveSharedPreference.getUserName(MainActivity.this).length() != 0) {
+      isAlreadyLoggedIn = true;
       if (SaveSharedPreference.isSubjectLogin(MainActivity.this)) {
+        EntityClass.getInstance().setSubject(true);
+        EntityClass.getInstance().stopMyService(getApplicationContext());
+        EntityClass.getInstance().startMyService(getApplicationContext());
         SubjectDetailModel.getInstance().setSubjectEmail(SaveSharedPreference.getUserName(MainActivity.this));
         SubjectDetailModel.getInstance().setSubjectName(SaveSharedPreference.getName(MainActivity.this));
         SubjectDetailModel.getInstance().setSubjectAge(SaveSharedPreference.getAge(MainActivity.this));
@@ -76,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
       } else {
+        EntityClass.getInstance().setSubject(false);
         PhysicianDetailModel.getInstance().setPhysicianEmail(SaveSharedPreference.getUserName(MainActivity.this));
         PhysicianDetailModel.getInstance().setPhysicianName(SaveSharedPreference.getName(MainActivity.this));
         PhysicianDetailModel.getInstance().setUserIdInDb(SaveSharedPreference.getUserId(MainActivity.this));
@@ -92,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onStart() {
     super.onStart();
+    EntityClass.getInstance().stopMyService(getApplicationContext());
   }
 
   @Override

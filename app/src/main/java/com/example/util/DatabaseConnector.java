@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.example.util.Interfaces.MyStatListener;
 import com.example.util.Interfaces.SubjectList;
+import com.example.util.Models.NoteModel;
 import com.example.util.Models.PhysicianChoiceModel;
 import com.example.util.Models.PhysicianDetailModel;
 import com.example.util.Models.SubjectDetailModel;
@@ -82,22 +83,18 @@ public class DatabaseConnector {
   }
 
   /**
-   * Destructor
-   */
-  protected void finalize() {
-    if (currentUser != null && firebaseAuth != null) {
-      firebaseAuth.signOut();
-      firebaseAuth.removeAuthStateListener(authStateListener);
-    }
-  }
-
-  /**
    * This method can be used to signOut of Firebase.
    */
   public void firebaseSignOut() {
+    firebaseAuth = FirebaseAuth.getInstance();
+    firebaseAuth.removeAuthStateListener(authStateListener);
     firebaseAuth.signOut();
   }
 
+  public boolean CheckLogInFireBase() {
+    Log.d(TAG, "firebaseSignOut: SIGNEDOUT SIGNEDOUT SIGNEDOUT SIGNEDOUT"+ firebaseAuth.getCurrentUser());
+    return firebaseAuth.getCurrentUser() != null;
+  }
 
   public String getCurrentUserId() {
     return FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -110,8 +107,7 @@ public class DatabaseConnector {
    */
   public void checkAlreadyLogin(MyStatListener myStatListener) {
     currentUser = firebaseAuth.getCurrentUser();
-    if (currentUser != null) myStatListener.status(true, null);
-    else myStatListener.status(false, null);
+    myStatListener.status(currentUser != null, null);
   }
 
   /**
@@ -379,9 +375,9 @@ public class DatabaseConnector {
               List<String> subjectData = new ArrayList<String>();
 
               for (Map.Entry<String, Object> subjectsList : task.getResult().getData().entrySet()) {
-                if (subjectsList.getKey() == "UserName" || subjectsList.getKey() == "UserIdInDB")
-                  continue;
-                subjectData.add(subjectsList.getValue() + "\n" + "email:" + subjectsList.getKey());
+                if (!subjectsList.getKey().equals("UserName") && !subjectsList.getKey().equals("UserIdInDB")) {
+                  subjectData.add(subjectsList.getValue() + "\n" + "email:" + subjectsList.getKey());
+                }
               }
               listner.getSubjectListStatus(true, subjectData);
             }
@@ -671,6 +667,7 @@ public class DatabaseConnector {
    * @param myStatListener - an interface for the callbacks, MyStatListener
    */
   public void getPhysicianControl(final MyStatListener myStatListener) {
+    if(firebaseAuth.getCurrentUser() == null) return;
     if (PhysicianDetailModel.getInstance().getPhysicianEmail().isEmpty()) return;
     DatabaseReference realDb = FirebaseDatabase.getInstance().getReference("Patient Access").child(SubjectDetailModel.getInstance().getUserIdInDb());
 
@@ -703,6 +700,34 @@ public class DatabaseConnector {
         Log.d(TAG, "onCancelled: " + databaseError.toException().toString());
         myStatListener.status(false, null);
         myStatListener.onFailure(databaseError.toException().toString());
+      }
+    });
+  }
+
+  /**
+   * This method is used to retrieve the notes from the database(firestore)
+   * @param path- The path after Data/Physician-Email/Patient-Email/
+   * @param myStatListener- an interface for the callbacks, MyStatListener
+   */
+  public void getNotes(String path, final MyStatListener myStatListener) {
+
+    dataCollectionReference.document(PhysicianDetailModel.getInstance().getPhysicianEmail())
+        .collection(SubjectDetailModel.getInstance().getSubjectEmail())
+        .document(path).get()
+        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+          @Override
+          public void onSuccess(DocumentSnapshot documentSnapshot) {
+            if(documentSnapshot.exists()) {
+              NoteModel obj = new NoteModel();
+              obj.setContent(documentSnapshot.getString("content"));
+              myStatListener.status(true, (Object)obj);
+            }
+          }
+        }).addOnFailureListener(new OnFailureListener() {
+      @Override
+      public void onFailure(@NonNull Exception e) {
+        myStatListener.status(false, null);
+        myStatListener.onFailure(e.getMessage());
       }
     });
   }
