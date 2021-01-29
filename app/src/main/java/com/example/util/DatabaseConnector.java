@@ -27,7 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -256,7 +258,8 @@ public class DatabaseConnector {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                           if (task.getResult().exists()) {
                             final DocumentSnapshot documentSnapshot = task.getResult();
-                            task.getResult().getReference().update(loginEmail, loginUserName)
+                            FieldPath field = FieldPath.of(loginEmail);
+                            task.getResult().getReference().update(field,loginUserName)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                   @Override
                                   public void onSuccess(Void aVoid) {
@@ -461,7 +464,7 @@ public class DatabaseConnector {
   public void saveSubjectImage(Uri imageUri, final MyStatListener myStatListener) {
     storageReference = FirebaseStorage.getInstance().getReference();
     collectionReference = db.collection("Users");
-    final StorageReference filePath = storageReference.child("Subjects_Images").child(SubjectDetailModel.getInstance().getSubjectEmail());
+    final StorageReference filePath = storageReference.child("Subjects_Images/" + SubjectDetailModel.getInstance().getUserIdInDb() + "/").child("profile_image");
     filePath.putFile(imageUri)
         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
           @Override
@@ -519,7 +522,7 @@ public class DatabaseConnector {
   public void getSubjectImage(final MyStatListener myStatListener) throws StorageException {
     try {
       storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://response-counter-138b6.appspot.com");
-      StorageReference filePath = storageReference.child("Subjects_Images").child(SubjectDetailModel.getInstance().getSubjectEmail()).child("imageUri.jpg");
+      StorageReference filePath = storageReference.child("Subjects_Images/" + SubjectDetailModel.getInstance().getUserIdInDb() + "/").child("profile_image");
 
        filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
         @Override
@@ -727,6 +730,39 @@ public class DatabaseConnector {
       @Override
       public void onFailure(@NonNull Exception e) {
         myStatListener.status(false, null);
+        myStatListener.onFailure(e.getMessage());
+      }
+    });
+  }
+
+  /**
+   * This method is used to update the user name of the patient from the settings pane.
+   * @param myStatListener A callback to handle the response.
+   */
+  public void updateName(final MyStatListener myStatListener) {
+    final DocumentReference path = dataCollectionReference.document(PhysicianDetailModel.getInstance().getPhysicianEmail());
+    FieldPath field = FieldPath.of(SubjectDetailModel.getInstance().getSubjectEmail());
+    path.update(field, SubjectDetailModel.getInstance().getSubjectName())
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+          @Override
+          public void onSuccess(Void aVoid) {
+            path.collection(SubjectDetailModel.getInstance().getSubjectEmail()).document("SubjectData")
+                .update("UserName", SubjectDetailModel.getInstance().getSubjectName())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                  @Override
+                  public void onSuccess(Void aVoid) {
+                    myStatListener.status(true, null);
+                  }
+                }).addOnFailureListener(new OnFailureListener() {
+              @Override
+              public void onFailure(@NonNull Exception e) {
+                myStatListener.onFailure(e.getMessage());
+              }
+            });
+          }
+        }).addOnFailureListener(new OnFailureListener() {
+      @Override
+      public void onFailure(@NonNull Exception e) {
         myStatListener.onFailure(e.getMessage());
       }
     });

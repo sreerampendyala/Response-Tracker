@@ -9,15 +9,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/mainBackground"
+        android:paddingStart="15dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="25dp"
         tools:context=".MiscellaneousActivites.settingsActivity">
 
         <TextView
             android:layout_width="220dp"
             android:layout_height="44dp"
-            android:fontFamily="@font/times_new_roman_400"
-            android:text="Settings"
+            android:text="@string/settings"
             android:textSize="33sp"
-            android:textColor="#303F9F"
+            android:textColor="@color/mainTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.083"
@@ -36,9 +39,10 @@
             app:civ_border_width="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.078" />
+            app:layout_constraintVertical_bias="0.113" />
 
         <ImageView
             android:id="@+id/imgview_cam_settings"
@@ -56,70 +60,82 @@
             android:id="@+id/settings_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Submit"
-            android:fontFamily="@font/times_new_roman_400"
-            android:textStyle="bold"
-            android:textSize="16sp"
+            android:background="@drawable/textview_border"
+            android:elevation="5dp"
+            android:text="@string/submit"
             android:textColor="#7B1FA2"
-            android:background="@color/cardview_light_background"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.467"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.755" />
+            app:layout_constraintVertical_bias="0.898" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="407dp"
-            android:layout_height="134dp"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.527"
+            app:layout_constraintHorizontal_bias="0.36"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.352">
+            app:layout_constraintTop_toBottomOf="@+id/imgView_pic_settings"
+            app:layout_constraintVertical_bias="0.19">
 
-            <EditText
-                android:id="@+id/updateName_settingsTb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="Enter Name"
-                android:enabled="false"
-                android:fontFamily="@font/times_new_roman_400"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="350dp"
+                android:layout_height="142dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="4dp"
+                android:background="@color/mainTextColor"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.82" />
+                app:layout_constraintCircleRadius="4dp">
 
-            <TextView
-                android:id="@+id/updateName_settingsLbl"
-                android:layout_width="288dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/times_new_roman_400"
-                android:text="Do you want to update your name?"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.105"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.243" />
+                <EditText
+                    android:id="@+id/updateName_settingsTb"
+                    android:layout_width="311dp"
+                    android:layout_height="46dp"
+                    android:ems="10"
+                    android:hint="@string/enter_name"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.41"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/updateName_switchSettings"
+                    app:layout_constraintVertical_bias="0.448" />
 
-            <Switch
-                android:id="@+id/updateName_switchSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.388"
-                app:layout_constraintStart_toEndOf="@+id/updateName_settingsLbl"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.242" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/updateName_settingsLbl"
+                    android:layout_width="288dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/do_you_want_to_update_your_name"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.209"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.135" />
+
+                <Switch
+                    android:id="@+id/updateName_switchSettings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/updateName_settingsLbl"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.347" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

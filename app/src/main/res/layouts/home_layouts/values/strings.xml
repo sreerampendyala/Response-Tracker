@@ -21,4 +21,5 @@
     <string name="single_button_tapping_test_instructions">Single-Button Tapping Test:\n\nPlease select either a practice trail or start the test using the buttons below, after pressing either Practice or Take Test buttons.\n\nPress the start button to begin the task. After pressing the start button, you will see a countdown to begin the task. When the countdown begins, please tap the button with your index finger as many times as possible during 30 seconds. After the duration you will see the number of taps successfully made.\n\nThe test will be taken in 3 continuous rounds, the average of the observations are recorded.</string>
     <string name="note">Note</string>
     <string name="type_here">Type here</string>
+    <string name="do_you_want_to_update_your_name">Do you want to update your name?</string>
 </resources>

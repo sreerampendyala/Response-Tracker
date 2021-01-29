@@ -74,10 +74,6 @@ public class SubjectHome extends AppCompatActivity {
     singleTestBtn.setEnabled(false);
     doubleTestBtn.setEnabled(false);
     posturalStabilityTest.setEnabled(false);
-    String data = "Name:\t\t" + SubjectDetailModel.getInstance().getSubjectName() + "\n" +
-        "Email:\t\t" + SubjectDetailModel.getInstance().getSubjectEmail() + "\n" +
-        "Age:\t\t" + SubjectDetailModel.getInstance().getSubjectAge() + "\n";
-    subjectInfo.setText(data);
 
     instructionsBtn.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -171,6 +167,12 @@ public class SubjectHome extends AppCompatActivity {
     getPictureOnStart();
     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     notificationManager.cancelAll();
+
+    String data = "Name:\t\t" + SubjectDetailModel.getInstance().getSubjectName() + "\n" +
+        "Email:\t\t" + SubjectDetailModel.getInstance().getSubjectEmail() + "\n" +
+        "Age:\t\t" + SubjectDetailModel.getInstance().getSubjectAge() + "\n";
+    subjectInfo.setText(data);
+
     buttonAction();
   }
 
